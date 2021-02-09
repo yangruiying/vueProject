@@ -4,6 +4,18 @@ const config = {
   addOrder: {
     url: '/order/addOrder',
     method: 'post'
+  },
+  getTrack: {
+    url: '/order/getTrack',
+    method: 'post'
+  },
+  getOrderExpress: {
+    url: '/order/getOrderExpress',
+    method: 'post'
+  },
+  changeState: {
+    url: '/order/changeState',
+    method: 'post'
   }
 }
 

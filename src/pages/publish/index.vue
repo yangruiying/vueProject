@@ -1,26 +1,29 @@
 <template>
   <div>
+    {{fileList}}
       <div class="banner">
           <div @click="$router.push({path: 'home'})"><span class="iconfont icon-fanhui"></span></div>
           <div class="title-name">发布</div>
-          <div><div class="publish" @click="publish">发布</div></div>
+          <div><el-button class="publish" @click="publish" type="primary">发布</el-button></div>
       </div>
     <textarea class="title" placeholder="请输入物品标题" v-model="formData.title"></textarea>
     <textarea class="intro" placeholder="品牌型号，新旧程度，入手渠道，转手原因" v-model="formData.intro"></textarea>
     <div class="uploadImage">
     <el-upload
-    v-for="i in size+1"
-    :key='i'
-    :before-upload="beforeAlbumUpload"
-    :on-success="handleAlbumSuccess"
-    :show-file-list="false"
-    accept="image/*"
-    action="http://localhost:8080/imageUpload/uploadImage"
-    class="avatar-uploader"
-    name="imageFile">
-    <img :src="formData.url[i-1]" alt="专辑图片" class="avatar" v-if="formData.url[i-1] !== ''">
-    <div v-else><i class="el-icon-plus avatar-uploader-icon"></i></div>
+      :action="this.config.uploadurl+'/imageUpload/uploadImage'"
+      name="imageFile"
+      list-type="picture-card"
+      accept="image/*"
+      :on-preview="handlePictureCardPreview"
+      :on-remove="handleRemove"
+      :on-success="onSuccess">
+      <i class="el-icon-plus"></i>
     </el-upload>
+
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
+
     </div>
     <div class="sort">
       <div>分类</div>
@@ -58,6 +61,8 @@ export default {
   name: 'publish',
   data () {
     return {
+      dialogImageUrl: '',
+      dialogVisible: false,
       test: '',
       size: 0,
       formData: {
@@ -66,11 +71,13 @@ export default {
         price: '',
         iniPrice: '',
         shipping: '',
-        url: [''],
+        url: [],
         firstSort: '',
         secondSort: '',
-        userId: sessionStorage.getItem('userId')
+        userId: sessionStorage.getItem('userId'),
+        cityName:sessionStorage.getItem("city")
       },
+      fileList: [],
       imgUrl: '',
       first: [],
       second: [],
@@ -83,6 +90,22 @@ export default {
     this.getFirstSort()
   },
   methods: {
+    onSuccess(file, fileList){
+        // alert(JSON.stringify(fileList))
+        this.fileList=fileList
+        this.formData.url.push(file.data)
+        // alert(this.formData.url)
+    },
+    handleRemove(file, fileList) {
+      this.formData.url=this.formData.url.filter(item => {
+        return item != JSON.stringify(file.response.data)
+      })
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
     handleAlbumSuccess (response, file, fileList) {
       this.formData.url.pop()
       this.imgUrl = response.data
@@ -113,13 +136,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/global.scss";
 .banner{
-    position: absolute;
+    position: fixed;
     padding-right: 100px;
-    height: 60px;
+    background: $pColor;
+    height: 50px;
     width: 100%;
     display: flex;
-    position: fixed;
+    
     top: 0;
     justify-content: space-between;
     align-items: center;
@@ -134,9 +159,9 @@ export default {
       width: 60px;
       height: 30px;
       border-radius: 5px;
-      background: rgb(229, 255, 0);
+      margin-right: 10px;
       display: flex;
-      margin: 0 auto;
+      
       align-items: center;
     }
 }

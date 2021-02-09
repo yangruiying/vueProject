@@ -16,6 +16,10 @@ const config = {
   getGoodsQuery: {
     url: '/goods/getGoodsQuery',
     method: 'post'
+  },
+  getGoodsDetail:{
+    url:'/goods/getGoodsDetail',
+    method:'post'
   }
 }
 

@@ -24,6 +24,18 @@ const config = {
   noReadCount: {
     url: '/chat/noReadCount',
     method: 'post'
+  },
+  getIsOrder: {
+    url: '/order/getIsOrder',
+    method: 'post'
+  },
+  getOrderState: {
+    url: '/order/getOrderState',
+    method: 'post'
+  },
+  getGoodsDetail:{
+    url:'/goods/getGoodsDetail',
+    method:'post'
   }
 }
 

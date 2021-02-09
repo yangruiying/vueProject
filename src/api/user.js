@@ -24,6 +24,26 @@ const config = {
   getAttenNum: {
     url: '/user/getAttenNum',
     method: 'post'
+  },
+  getFansList:{
+    url:'/user/getFansList',
+    method:'post'
+  },
+  getAttenList:{
+    url:'/user/getAttenList',
+    method:'post'
+  },
+  getCollection:{
+    url:'/goods/getCollection',
+    method:'post'
+  },
+  getCollectionList:{
+    url:'/goods/getCollectionList',
+    method:'post'
+  },
+  getGoodsDetail:{
+    url:'/goods/getGoodsDetail',
+    method:'post'
   }
 }
 

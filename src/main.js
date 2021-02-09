@@ -7,10 +7,14 @@ import ElementUI from 'element-ui'
 import store from './store/index.js'
 import 'element-ui/lib/theme-chalk/index.css'
 import animated from 'animate.css'
-
+import config from './config.js'
+import Vant from 'vant';
+import 'vant/lib/index.css';
+Vue.prototype.config = config
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(animated)
+Vue.use(Vant)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

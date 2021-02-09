@@ -1,66 +1,28 @@
 <template>
   <div class="container">
-    <ul class="book-classify">
-      <li :class="{active: item.sortId === currentClassify.sortId}" v-for="(item, index) in first" :key="index" @click="getSecondSort(item)">
-        <b></b>
-        <span>{{item.name}}</span>
-      </li>
-    </ul>
-    <ul class="book-classify-conteiner">
-      <li class="book-classify-item" v-for="(item, index) in second" :key="index">
-        <div class="book-classify-item-title">{{item.name}}</div>
-        <ul class="book-list">
-          <li v-for="(childItem, childIndex) in item.goodsList" :key="childIndex" @click="getCommDetail(childItem)">
-            <img :src="childItem.indexPath" alt="">
-            <div>{{childItem.title}}</div>
-            <div>
-              ￥{{childItem.price}}
-            </div>
-          </li>
-        </ul>
-      </li>
-    </ul>
+  <van-tabs v-model="active">
+  <van-tab title="选车"></van-tab>
+  <van-tab title="新能源"></van-tab>
+  <van-tab title="二手车"></van-tab>
+  <van-tab title="新车热卖"></van-tab>
+</van-tabs>
+  <van-search v-model="value" placeholder="请输入搜索关键词" />
+  <van-grid :column-num="5">
+  <van-grid-item v-for="value in 10" :key="value" icon="photo-o" text="文字" />
+</van-grid>
+  <van-index-bar>
+    <div v-for="(item,index) in first" :key="index">
+      <van-index-anchor :index="item.firstChar" />
+      <div v-for="(item,index) in item.firstSortList" :key="index">
+        <van-cell :title="item.name" style="text-align:left" :icon="item.carIcon" @click="toDetail(item.sortId)"/>
+      </div>
+    </div>
+  </van-index-bar>
   </div>
 </template>
 
 <script>
-// import req from '@/api/comm-classify.js'
 
-// export default {
-//   name: 'comm-classify',
-//   data () {
-//     return {
-//       oneClassifyList: [],
-//       currentClassify: {},
-//       commList: []}
-//   },
-//   mounted () {
-//     this.getClassify()
-//   },
-//   methods: {
-//     getClassify () {
-//       req('getClassify', {}).then(data => {
-//         this.oneClassifyList = data.data.oneClassifyList
-
-//         this.currentClassify = this.oneClassifyList[0]
-
-//         this.getTwoClassify(this.currentClassify)
-//       })
-//     },
-//     getTwoClassify (item) {
-//       this.currentClassify = item
-
-//       req('getTwoClassify', {classifyId: item.classifyId}).then(data => {
-//         this.commList = data.data.twoClassifyList
-//       })
-//     },
-//     getCommDetail (item) {
-//       sessionStorage.setItem('currentComm', JSON.stringify(item))
-
-//       this.$router.push({path: '/comm-detail'})
-//     }
-//   }
-// }
 import req from '@/api/sort.js'
 export default{
   name: 'classify',
@@ -80,10 +42,19 @@ export default{
     this.getFirstSort()
   },
   methods: {
+    toDetail(id){
+      this.$router.push({path:'classifyList',query:{id:id}})
+    },
     getFirstSort () {
       req('getFirstSort', {}).then(data => {
+        console.log(JSON.stringify(data))
         this.first = data.data.data
-        this.currentClassify = this.first[0]
+        if (this.$route.query.sortId == null){
+          this.currentClassify = this.first[0]
+        }
+        else{
+          this.currentClassify = this.$route.query
+        }
         this.getSecondSort(this.currentClassify)
       })
     },
@@ -93,18 +64,38 @@ export default{
         this.second = data.data.data
       })
     },
-    getCommDetail (item) {
-      sessionStorage.setItem('goodsDetail', JSON.stringify(item))
-      this.$router.push({path: '/goodsDetail'})
+    getCommDetail (goodsId) {
+      // sessionStorage.setItem('goodsDetail', JSON.stringify(item))
+      // this.$router.push({path: '/goodsDetail'})
+      req('getGoodsDetail',{goodsId:goodsId}).then(data =>{
+            sessionStorage.setItem('goodsDetail', JSON.stringify(data.data.data))
+            this.$router.push({path: '/goodsDetail'})
+        })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/global.scss";
+.van-cell {
+  line-height:40px
+}
+/deep/ .van-index-anchor{
+  text-align: left;
+  background-color:#e9e9e9
+}
+.van-icon__image{
+  width: 40px;
+  height: 40px;
+}
+.price {
+          font-size: 16px;
+          color: rgb(255, 0, 0);
+        }
 .container {
   position: absolute;
-  top: 50px;
+  top: 0px;
   bottom: 0;
   width: 100%;
   height: 630px;
@@ -129,10 +120,11 @@ export default{
         width: 100%;
         height: 100%;
       }
+      
 
     }
     li.active {
-      color: rgb(197, 156, 104);
+      color: $pColor;
       background: #ddd;
 
       b {
@@ -141,7 +133,7 @@ export default{
         top: 50%;
         width: 3px;
         height: 20px;
-        background: rgb(197, 156, 104);
+        background:$pColor;
         margin-top: -10px;
       }
     }
@@ -154,10 +146,10 @@ export default{
     bottom: 0;
     overflow: auto;
     width: 78%;
-
+    margin-bottom: 0px;
     .book-classify-item {
       .book-classify-item-title {
-        background: rgb(125, 134, 138);
+        // background: rgb(125, 134, 138);
         width: 100%;
         height: 40px;
         padding-left: 10px;
@@ -178,11 +170,13 @@ export default{
           flex-direction: column;
           justify-content: flex-start;
           align-items: center;
-          width: 50%;
+          width: 40%;
           margin-bottom: 10px;
-
+          margin-bottom: 10px;
+          margin-right: 25px;
           img {
-            width: 70%;
+            width: 130px;
+            height: 130px;
           }
 
           div:nth-child(2) {

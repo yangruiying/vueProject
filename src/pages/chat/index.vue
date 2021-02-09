@@ -1,19 +1,16 @@
 <template>
   <div>
     <span class="aaa">{{chatInfo}}</span>
-      <!-- {{userId}}
-      {{formData}}aaaaaaaaa -->
-      <!-- {{chatInfo}}bbbbbbbb -->
       <div class="banner">
         <span class="iconfont icon-fanhui" @click="back"></span>
         <h3>{{formData.userName}}</h3>
       </div>
 <div class="msgframe">
+
 <div v-for="(item, index) in chatInfo" :key="index" class="chatShow1">
-  <!-- {{item}} -->
   <div class="chatShowA" v-if="item.userId === formData.user1">
-    <img :src="formData.user1Img">
-    <div><span>{{item.msg}}</span></div>
+      <img :src="formData.user1Img">
+      <div><span>{{item.msg}}</span></div>
   </div>
   <div class="chatShowB" v-else>
     <img :src="formData.imagePath">
@@ -22,17 +19,31 @@
 </div>
 </div>
 <div class="goodsInfo">
-        <img :src="formData.indexPath">
-        <span>￥{{formData.price}}</span>
-        <div class="buy" @click="$router.push({path: 'select-address'})">
-          <div v-if="role === 1"><img src="../../assets/buy.png"></div>
+  <img :src="formData.indexPath" @click="getCommDetail">
+  <span>￥{{formData.price}}</span>
+        <div class="buy">
+          <div v-if="role === 1">
+            <!-- <img src="../../assets/buy.png"> -->
+            <el-button v-if="state === null || state === ''||state===3"  @click="$router.push({path: 'select-address'})">立即购买</el-button>
+            <el-button v-else-if="state === 0">等待发货</el-button>
+            <el-button v-else-if="state === 1" @click="$router.push({path: 'order-detail'})">已发货</el-button>
+            <el-button v-else-if="state === 2" @click="$router.push({path: 'goods-evaluation',query:{orderId:orderId}})">立即评价</el-button>
+            <!-- <el-button v-else-if="state === 3" @click="$router.push({path: 'order-detail'})">交易完成</el-button> -->
+          </div>
+
+          <div v-if="role === 0">
+            <!-- <img src="../../assets/buy.png"> -->
+            <el-button v-if="state === 0" @click="$router.push({path: '/ship-goods'})">立即发货</el-button>
+            <el-button v-else-if="state === 1" @click="$router.push({path: 'order-detail'})">等待收货</el-button>
+            <el-button v-else-if="state === 2" @click="$router.push({path: 'order-detail'})">等待评价</el-button>
+            <!-- <el-button v-else-if="state === 3">交易完成</el-button> -->
+          </div>
         </div>
-      </div>
+</div>
 <div class="sentMsg">
 <div>消息：</div>
 <div><input id="text" type="text" /></div>
 <div><button @click="send" >发送消息</button></div>
-<!-- <button @click="ini()">aa</button> -->
 </div>
   </div>
 </template>
@@ -63,7 +74,9 @@ export default {
       chatInfo: [],
       goodsDetail: [],
       test: 0,
-      role: ''
+      role: '',
+      state: '',
+      orderId:''
     }
   },
   mounted () {
@@ -71,14 +84,30 @@ export default {
     this.conectWebSocket()
     this.setRead()
     this.getRole()
+    this.getOrderState()
     setTimeout(() => {
       this.ini()
     }, 500)
   },
   methods: {
+    getCommDetail () {
+      // sessionStorage.setItem('goodsDetail', JSON.stringify(item))
+      // this.$router.push({path: '/goodsDetail'})
+      reqqq('getGoodsDetail',{goodsId:this.formData.goodsId}).then(data =>{
+            sessionStorage.setItem('goodsDetail', JSON.stringify(data.data.data))
+            this.$router.push({path: '/goodsDetail'})
+        })
+    },
     back () {
       window.location.href = document.referrer
       window.history.back(-1)
+    },
+    getOrderState () {
+      reqqq('getOrderState',{user1:this.userId,user2:this.formData.user2,goodsId:this.formData.goodsId}).then(data =>{
+        this.orderId = data.data.data.orderId
+        this.state = data.data.data.state
+        sessionStorage.setItem('orderId',data.data.data.orderId)
+      })
     },
     setRead () {
       reqqq('setRead', {...this.formData})
@@ -95,7 +124,7 @@ export default {
       var sel = this
       // 判断当前浏览器是否支持WebSocket
       if ('WebSocket' in window) {
-        this.websocket = new WebSocket('ws://localhost:8080/websocket/' + sel.userId + '/' + sel.formData.goodsId)
+        this.websocket = new WebSocket('ws://'+this.config.baseurl+'/websocket/' + sel.userId + '/' + sel.formData.goodsId)
       } else {
         alert('Not support websocket')
       }
@@ -159,10 +188,11 @@ export default {
         socketMsg.type = 1
       }
        reqqq('addChat', {...this.formData}).then(data => {
-        this.nickname = data.data.data
+        // this.nickname = data.data.data
         this.websocket.send(JSON.stringify(socketMsg))
       })
     },
+    //更新未读消息
     ini(){
       var socketMsg = {msg: '921310952', toUser: this.userId+'home'}
       socketMsg.type = 1
@@ -188,7 +218,7 @@ export default {
 }
 .banner{
   top: 0;
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 50px;
   display: flex;
@@ -217,11 +247,13 @@ export default {
 .buy{
     float:right;
     color:blue;
-    img{
-      width: 50px;
-      height: 50px;
+    .el-button{
       float: right;
-      margin-right: 5px;
+      margin-top: 10px;
+      margin-right: 10px;
+      height: 30px;
+      background: red;
+      color: white;
     }
     span{
       color: #000;
@@ -258,7 +290,7 @@ export default {
 .msgframe{
   //height: 500px;
   position: relative;
-  height: 590px;
+  height: 565px;
   width: 100%;
   float: left;
   margin-top: 50px;

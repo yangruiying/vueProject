@@ -17,8 +17,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   /* color: #a6ff00; */
-  margin-top: 51px;
-  background: rgb(241, 239, 235);
+  /* color:primaryColor; */
+  margin-top: 50px;
+  /* background: rgb(241, 239, 235); */
+  
 }
 </style>
 <style lang="scss">

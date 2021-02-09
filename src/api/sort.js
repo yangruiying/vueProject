@@ -8,6 +8,14 @@ const config = {
   getSecondSort: {
     url: '/sort/getSecondSort',
     method: 'post'
+  },
+  getGoodsDetail:{
+    url:'/goods/getGoodsDetail',
+    method:'post'
+  },
+  getCarSort:{
+    url:'/sort/getCarSort',
+    method:'post'
   }
 }
 

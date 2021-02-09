@@ -22,29 +22,37 @@
          <!-- 店长 -->
         <div @click="$router.push({path: '/comm-home'})">
           <!-- <img v-show="currentPath !== '/comm-home'" src="../assets/u1075.png" alt=""> -->
-          <span class="iconfont icon-shouye" :style="{color: currentPath === '/comm-home' || currentPath === '/attention' || currentPath === '/location' ? '#C39862' : '#333333'}"></span>
-          <div :style="{color: currentPath === '/comm-home' || currentPath === '/attention'  || currentPath === '/location'  ? '#C39862' : '#333333'}">首页</div>
+          <span class="iconfont icon-shouye" :style="{color: currentPath === '/comm-home' || currentPath === '/attention' || currentPath === '/location' ? config.pColor : '#333333'}"></span>
+          <div :style="{color: currentPath === '/comm-home' || currentPath === '/attention'  || currentPath === '/location'  ? config.pColor : '#333333'}">首页</div>
         </div>
         <div @click="$router.push({path: '/classify'})">
           <!-- <img v-show="currentPath !== '/comm-home'" src="../assets/u1075.png" alt=""> -->
-          <span class="iconfont icon-fenlei" :style="{color: currentPath === '/classify' ? '#C39862' : '#333333'}"></span>
-          <div :style="{color: currentPath === '/classify' ? '#C39862' : '#333333'}">分类</div>
+          <span class="iconfont icon-fenlei" :style="{color: currentPath === '/classify' ? config.pColor : '#333333'}"></span>
+          <div :style="{color: currentPath === '/classify' ? config.pColor : '#333333'}">分类</div>
         </div>
         <div @click="$router.push({path: 'publish'})">
           <!-- <img v-show="currentPath !== '/comm-home'" src="../assets/u1075.png" alt=""> -->
-          <span class="iconfont icon-iconfontzhizuobiaozhunbduan31" :style="{color: currentPath === '/publish' ? '#C39862' : '#333333'}"></span>
-          <div :style="{color: currentPath === '/publish' ? '#C39862' : '#333333'}">上架</div>
+          <span class="iconfont icon-iconfontzhizuobiaozhunbduan31" :style="{color: currentPath === '/publish' ? config.pColor : '#333333'}"></span>
+          <div :style="{color: currentPath === '/publish' ? config.pColor : '#333333'}">上架</div>
         </div>
         <div @click="$router.push({path: '/message'})">
           <!-- <img v-show="currentPath !== '/comm-home'" src="../assets/u1075.png" alt=""> -->
-          <div class="noRead" v-if="count !== 0">{{count}}</div>
-          <span class="iconfont icon-xiaoxi" :style="{color: currentPath === '/message' ? '#C39862' : '#333333'}"></span>
-          <div :style="{color: currentPath === '/message' ? '#C39862' : '#333333'}">消息</div>
+          <!-- <div class="noRead" v-if="count !== 0">{{count}}</div> -->
+          <el-badge :value="count" v-if="count === 0" hidden="true">
+          <span class="iconfont icon-xiaoxi" :style="{color: currentPath === '/message' ? config.pColor : '#333333'}"></span>
+          <div :style="{color: currentPath === '/message' ? config.pColor : '#333333'}">消息</div>
+          </el-badge>
+          
+          <el-badge :value="count" v-else>
+          <span class="iconfont icon-xiaoxi" :style="{color: currentPath === '/message' ? config.pColor : '#333333'}"></span>
+          <div :style="{color: currentPath === '/message' ? config.pColor : '#333333'}">消息</div>
+          </el-badge>
+
         </div>
         <div @click="$router.push({path: '/mine'})">
           <!-- <img v-show="currentPath !== '/comm-home'" src="../assets/u1075.png" alt=""> -->
-          <span class="iconfont icon-gerenzhongxin" :style="{color: currentPath === '/mine' ? '#C39862' : '#333333'}"></span>
-          <div :style="{color: currentPath === '/mine' ? '#C39862' : '#333333'}">我的</div>
+          <span class="iconfont icon-gerenzhongxin" :style="{color: currentPath === '/mine' ? config.pColor : '#333333'}"></span>
+          <div :style="{color: currentPath === '/mine' ? config.pColor : '#333333'}">我的</div>
         </div>
       </el-footer>
     </el-container>
@@ -52,7 +60,10 @@
 </template>
 
 <script>
+
 import req from '@/api/chat.js'
+import BMap from 'BMap'
+// import BMap from 'http://api.map.baidu.com/api?v=2.0&ak=GeK4oOvKuNkv3ZHO4A8VDLpSZzzVNgiS'
 export default {
   name: 'home',
   data () {
@@ -60,10 +71,12 @@ export default {
       mainStyle: {
 
       },
+      color:'rgb(254,58,59)',
       userId: sessionStorage.getItem('userId'),
       count: '',
       chatList: '',
-      test: 1
+      test: 1,
+      LocationCity:"正在定位"    //给渲染层定义一个初始值
     }
   },
   computed: {
@@ -89,9 +102,22 @@ export default {
   mounted() {
     this.conectWebSocket();
     this.noReadCount();
-    this.getChatList()
+    this.getChatList();
+    this.city();
   },
   methods: {
+    city(){    //定义获取城市方法
+            const geolocation = new BMap.Geolocation();
+            var _this = this
+            geolocation.getCurrentPosition(function getinfo(position){
+                let city = position.address.city;             //获取城市信息
+                let province = position.address.province;    //获取省份信息
+                _this.LocationCity = city
+                sessionStorage.setItem("city",city)
+            }, function(e) {
+                _this.LocationCity = "定位失败"
+            }, {provider: 'baidu'});		
+        },
     back () {
       window.location.href = document.referrer
       window.history.back(-1)
@@ -116,7 +142,7 @@ export default {
       var sel = this
       // 判断当前浏览器是否支持WebSocket
       if ('WebSocket' in window) {
-        this.websocket = new WebSocket('ws://localhost:8080/websocket/' + this.userId + 'home' + '/' + 'aaa')
+        this.websocket = new WebSocket('ws://'+this.config.baseurl+'/websocket/' + this.userId + 'home' + '/' + 'aaa')
       } else {
         alert('Not support websocket')
       }
@@ -153,6 +179,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/global.scss";
+.el-badge{
+  
+}
 .class1{
   font-size: 23px;
   font-weight: 600;
@@ -177,7 +207,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: yellow;
+  background:$pColor;
+  color: #ffffff;
   position: absolute;
   top: 0;
   position: fixed;
@@ -248,7 +279,7 @@ export default {
 
     div {
       position: relative;
-      top: 3px;
+      top: 0px;
     }
   }
   .noRead{

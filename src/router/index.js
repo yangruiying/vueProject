@@ -18,11 +18,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "comm-home" */ '@/pages/comm-home/index.vue'),
           meta: {
             title: [
-              {
-                titleName: '关注',
-                toPath: '/attention',
-                name: 'attention'
-              },
+              // {
+              //   titleName: '关注',
+              //   toPath: '/attention',
+              //   name: 'attention'
+              // },
               {
                 titleName: '首页',
                 toPath: '/comm-home',
@@ -44,11 +44,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "comm-home" */ '@/pages/attention/index.vue'),
           meta: {
             title: [
-              {
-                titleName: '关注',
-                toPath: '/attention',
-                name: 'attention'
-              },
+              // {
+              //   titleName: '关注',
+              //   toPath: '/attention',
+              //   name: 'attention'
+              // },
               {
                 titleName: '首页',
                 toPath: '/comm-home',
@@ -70,11 +70,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "comm-home" */ '@/pages/location/index.vue'),
           meta: {
             title: [
-              {
-                titleName: '关注',
-                toPath: '/attention',
-                name: 'attention'
-              },
+              // {
+              //   titleName: '关注',
+              //   toPath: '/attention',
+              //   name: 'attention'
+              // },
               {
                 titleName: '首页',
                 toPath: '/comm-home',
@@ -101,7 +101,7 @@ export default new Router({
                 toPath: '/mine'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: true
           }
         },
@@ -116,8 +116,54 @@ export default new Router({
                 toPath: '/classify'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: true
+          }
+        },
+        ,
+        {
+          path: '/classifyList',
+          name: 'classifyList',
+          component: () => import('@/pages/classify/list.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '分类',
+                toPath: '/classify'
+              }
+            ],
+            headerHide: true,
+            footerShow: false
+          }
+        },
+        {
+          path: '/compute',
+          name: 'compute',
+          component: () => import('@/pages/classify/compute.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '分类',
+                toPath: '/classify'
+              }
+            ],
+            headerHide: true,
+            footerShow: false
+          }
+        },
+        {
+          path: '/carDetail',
+          name: 'carDetail',
+          component: () => import('@/pages/classify/carDetail.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '分类',
+                toPath: '/classify'
+              }
+            ],
+            headerHide: true,
+            footerShow: false
           }
         },
         {
@@ -260,6 +306,99 @@ export default new Router({
             ],
             goBackShow: true
           }
+        },
+        {
+          path: '/ship-goods',
+          name: 'ship-goods',
+          component: () => import('@/pages/ship-goods/index.vue'),
+          meta: {
+            goBackShow: true
+          }
+        },
+        {
+          path: '/order-detail',
+          name: 'order-detail',
+          component: () => import('@/pages/order-detail/index.vue'),
+          meta: {
+            goBackShow: true
+          }
+        },
+        {
+          path: '/home-page',
+          name: 'home-page',
+          component: () => import('@/pages/home-page/index.vue'),
+          meta: {
+            title:[
+              {
+                titleName: '个人主页'
+              }
+            ],
+            goBackShow: true
+          }
+        },
+        {
+          path:'/goods-edit',
+          name: 'goods-edit',
+          component: () => import('@/pages/goods-edit/index.vue'),
+          meta:{
+            headerHide: true,
+            footerShow: false
+          }
+        },
+        {
+          path:'/goods-evaluation',
+          name: 'goods-evaluation',
+          component: () => import('@/pages/goods-evaluation/index.vue'),
+          meta:{
+            
+            headerHide: true,
+            footerShow: false
+          }
+        },
+        {
+          path:'/fan',
+          name: 'fan',
+          component: () => import('@/pages/mine/fan.vue'),
+          meta:{
+            title:[
+              {
+                titleName: '粉丝列表'
+              }
+            ],
+            headerHide: false,
+            footerShow: false,
+            goBackShow: true
+          }
+        },
+        {
+          path:'/atten',
+          name: 'atten',
+          component: () => import('@/pages/mine/atten.vue'),
+          meta:{
+            title:[
+              {
+                titleName: '关注列表'
+              }
+            ],
+            headerHide: false,
+            footerShow: false,
+            goBackShow: true
+          }
+        },
+        {
+          path:'/collection',
+          name: 'collection',
+          component: () => import('@/pages/mine/collection.vue'),
+          meta:{
+            title:[
+              {
+                titleName: '收藏列表'
+              }
+            ],
+            headerHide: false,
+            footerShow: false,
+            goBackShow: true
+          }
         }
       ]
     },
@@ -271,6 +410,11 @@ export default new Router({
     {
       path: '/',
       redirect: '/login'
+    },
+    {
+      path:'/register',
+      name: 'register',
+      component: () => import(/* webpackChunkName: "login" */ '@/pages/register.vue')
     }
   ]
 })

@@ -3,8 +3,14 @@
   <div class="chatframe" v-for="(item,index) in chatList" :key="index" @click="getChatDetail(item)">
     <div>
     <div style="width:90px">
-      <img :src="item.imagePath">
-      <div class="noRead" v-if="item.readCount !== '0'"><span>{{item.readCount}}</span></div>
+      <el-badge :value="item.readCount" v-if="item.readCount === '0'" hidden="true">
+        <img :src="item.imagePath">
+      </el-badge>
+
+      <el-badge :value="item.readCount" v-else>
+        <img :src="item.imagePath">
+      </el-badge>
+      <!-- <div class="noRead" v-if="item.readCount !== '0'"><span>{{item.readCount}}</span></div> -->
     </div>
     </div>
     <div>
@@ -13,6 +19,43 @@
         <div class="msg">{{item.msg}}</div>
       </div>
     </div>
+
+
+    <div class="goodsState">
+    <div v-if="item.own === userId">
+      <div v-if="item.state !== null">
+        <div v-if="item.state === '0'">
+            请尽快发货
+        </div>
+
+        <div v-if="item.state === '1'">
+            等待买家收货
+        </div>
+
+        <div v-if="item.state === '2'">
+            等待买家评价
+        </div>
+        </div>
+    </div>
+
+    <div v-if="item.own !== userId">
+      <div v-if="item.state !== null">
+        <div v-if="item.state === '0'">
+            等待发货
+        </div>
+
+        <div v-if="item.state === '1'">
+            卖家已发货
+        </div>
+
+         <div v-if="item.state === '2'">
+            等待评价
+        </div>
+        </div>
+    </div>
+  </div>
+
+
     <div><img :src="item.indexPath"></div>
   </div>
   </div>
@@ -30,7 +73,8 @@ export default {
       chatList: [],
       userId: sessionStorage.getItem('userId'),
       goodsId: '111',
-      newMsgList: []
+      newMsgList: [],
+      isBuyList: []
     }
   },
   mounted () {
@@ -38,6 +82,11 @@ export default {
     this.conectWebSocket()
   },
   methods: {
+    getIsOrder(user2,goodsId){
+      req('getIsOrder',{user1:this.userId,user2:user2,goodsId:goodsId}).then(data => {
+        this.isBuyList.push(data.data.data)
+      })
+    },
     getChatList () {
       req('chatList', {userId: this.userId}).then(data => {
         this.chatList = data.data.data
@@ -54,7 +103,7 @@ export default {
       var sel = this
       // 判断当前浏览器是否支持WebSocket
       if ('WebSocket' in window) {
-        this.websocket = new WebSocket('ws://localhost:8080/websocket/' + sel.userId + '/' + sel.goodsId)
+        this.websocket = new WebSocket('ws://localhost:8081/websocket/' + sel.userId + '/' + sel.goodsId)
       } else {
         alert('Not support websocket')
       }
@@ -99,7 +148,7 @@ export default {
   position: relative;
   display: flex;
   width: 100%;
-  height: 60px;
+  height: 68px;
   margin-top: 10px;
   img{
     width: 50px;
@@ -119,6 +168,9 @@ export default {
       }
     }
    
+  }
+  .goodsState{
+    color: red;
   }
 }
 .noRead{

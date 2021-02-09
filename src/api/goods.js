@@ -37,9 +37,61 @@ const config = {
     url: '/favor/isFavor',
     method: 'post'
   },
+  addCollection: {
+    url: '/collection/addCollection',
+    method: 'post'
+  },
+  delCollection: {
+    url: '/collection/delCollection',
+    method: 'post'
+  },
+  isCollection: {
+    url: '/collection/isCollection',
+    method: 'post'
+  },
   getFans: {
     url: '/user/getFans',
     method: 'post'
+  },
+  addLeaveMessage: {
+    url:'/goods/addLeaveMessage',
+    method:'post'
+  },
+  getLeaveMessage:{
+    url:'/goods/getLeaveMessage',
+    method:'post'
+  },
+  addRecover:{
+    url:'/goods/addRecover',
+    method:'post'
+  },
+  updateGoodsInfo:{
+    url:'/goods/updateGoodsInfo',
+    method:'post'
+  },
+  getGoodsDetail:{
+    url:'/goods/getGoodsDetail',
+    method:'post'
+  },
+  getGoodsByCity:{
+    url:'/goods/getGoodsByCity',
+    method:'post'
+  },
+  getNew:{
+    url:'/goods/getNew',
+    method:'post'
+  },
+  getHotGoods:{
+    url:'/goods/getHotGoods',
+    method:'post'
+  },
+  addBrower:{
+    url:'/goods/addBrower',
+    method:'post'
+  },
+  getGoodsBySortId:{
+    url:'/goods/getGoodsBySortId',
+    method:'post'
   }
 }
 

@@ -5,7 +5,7 @@
     <router-view/>
   </div>
   <el-form inline label-width="65px">
-      <el-form-item label="用户名" prop="username">
+      <el-form-item label="账号" prop="username">
         <el-input v-model="formData.account"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
@@ -44,12 +44,13 @@ export default {
         url: process.env.BASE_API + '/auth/form',
         data: qs.stringify(this.formData),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;'
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then(data => {
         this.userId = data.data.data.userId
         if (this.userId !== null) {
           sessionStorage.setItem('userId', this.userId)
+          sessionStorage.setItem('token',data.data.data.token)
           req('getUserInfo', {userId: this.userId}).then(data => {
             sessionStorage.setItem('userInfo', JSON.stringify(data.data.data))
           })

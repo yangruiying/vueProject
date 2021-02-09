@@ -12,6 +12,10 @@ const config = {
   userAddress: {
     url: '/address/userAddress',
     method: 'post'
+  },
+  addChat: {
+    url: '/chat/addChat',
+    method: 'post'
   }
 }
 

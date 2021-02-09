@@ -1,40 +1,30 @@
 <template>
-<div>
-  <!-- {{this.userId}}
-  {{this.userInfo}} -->
-  <div class="search">
+<div style="background: rgb(241, 239, 235);">
+  <!-- <div class="search">
     <el-input placeholder="请输入搜索内容"></el-input>
-  </div>
-  <!-- <div class="block">
-    <span class="demonstration">热门商品</span>
-    <el-carousel height="150px">
-      <el-carousel-item v-for="(childItem, childIndex) in goodsList" :key="childIndex">
-        <img :src="childItem.indexPath" @click="getGoodsDetail(childItem)">
-      </el-carousel-item>
-    </el-carousel>
   </div> -->
   <div class="sort">
     <div class="content">
-      <img src="../../assets/shouji.png">
-      <div>手机</div>
+      <img src="../../assets/shouji.png" @click="toClassify(1)">
+      <div>数码</div>
     </div>
 
-    <div class="content">
+    <div class="content" @click="toClassify(3)">
       <img src="../../assets/tushu.png">
       <div>图书</div>
     </div>
 
-    <div class="content">
+    <div class="content" @click="toClassify(2)">
       <img src="../../assets/shoe.png">
       <div>鞋</div>
     </div>
 
-    <div class="content">
-      <img src="../../assets/diannao.png">
-      <div>电脑</div>
+    <div class="content" @click="toClassify(5)">
+      <img src="../../assets/dianqi.png">
+      <div>电器</div>
     </div>
 
-    <div class="content">
+    <div class="content" @click="toClassify(4)">
       <img src="../../assets/fuzhuang.png">
       <div>服装</div>
     </div>
@@ -43,48 +33,55 @@
     <div class="a1-1">
       <div>热门商品</div>
       <div class="getImage">
-      <div><img class="leftImg" :src="goodsList[0].indexPath" @click="getGoodsDetail(childItem)"></div>
-      <div><img class="rightImg" :src="goodsList[1].indexPath" @click="getGoodsDetail(childItem)"></div>
+      <div><img class="leftImg" :src="hotGoodsList[0].indexPath" @click="getGoodsDetail(hotGoodsList[0].goodsId)"></div>
+      <div><img class="rightImg" :src="hotGoodsList[1].indexPath" @click="getGoodsDetail(hotGoodsList[1].goodsId)"></div>
     </div>
     </div>
 
     <div class="a1-1">
       <div>热门卖家</div>
       <div class="getImage">
-       <div><img class="leftImg" :src="fansList[0].imagePath" @click="getGoodsDetail(childItem)"></div>
-       <div><img class="rightImg" :src="fansList[1].imagePath" @click="getGoodsDetail(childItem)"></div>
+       <div><img class="leftImg" :src="fansList[0].imagePath" @click="getHomePage(fansList[0].userId)"></div>
+       <div><img class="rightImg" :src="fansList[1].imagePath" @click="getHomePage(fansList[1].userId)"></div>
       </div>
     </div>
 
-    <div class="a1-1">
+    <!-- <div class="a1-1">
       <div>同城商品</div>
       <div class="getImage">
-      <div><img class="leftImg" :src="goodsList[0].indexPath" @click="getGoodsDetail(childItem)"></div>
-      <div><img class="rightImg" :src="goodsList[1].indexPath" @click="getGoodsDetail(childItem)"></div>
+      <div><img class="leftImg" :src="cityGoodsList[0].indexPath" @click="getGoodsDetail(cityGoodsList[0].goodsId)"></div>
+      <div><img class="rightImg" :src="cityGoodsList[1].indexPath" @click="getGoodsDetail(cityGoodsList[1].goodsId)"></div>
       </div>
-    </div>
+    </div> -->
 
     <div class="a1-1">
-      <div>关注商品</div>
+      <div>最新发布</div>
       <div class="getImage">
-       <div><img class="leftImg" :src="fansList[0].imagePath" @click="getGoodsDetail(childItem)"></div>
-       <div><img class="rightImg" :src="fansList[1].imagePath" @click="getGoodsDetail(childItem)"></div>
+       <div><img class="leftImg" :src="newList[0].indexPath" @click="getGoodsDetail(newList[0].goodsId)"></div>
+       <div><img class="rightImg" :src="newList[1].indexPath" @click="getGoodsDetail(newList[1].goodsId)"></div>
     </div>
   </div>
   </div>
-  <div class="module-title">我的关注</div>
-  <div class="showGoods">
-    <ul class="book-list">
-          <li v-for="(childItem, childIndex) in attenList" :key="childIndex" @click="getGoodsDetail(childItem)">
-            <!-- <img :src="childItem.goodsImagePath" alt=""> -->
-            <img :src="childItem.indexPath">
-            <div>{{childItem.title}}</div>
-            <div>
-              ￥{{childItem.price}}
-            </div>
+  <div class="module-title">为您推荐</div>
+  
+  <div class="showGoods" >
+    <ul class="goods-list" style="background: rgb(241, 239, 235);">
+          <li v-for="(childItem, childIndex) in attenList" :key="childIndex" @click="getGoodsDetail(childItem.goodsId)">
+              <el-card  :body-style="{ padding: '0px' }">
+                <img :src="childItem.indexPath" class="image">
+                <div style="padding: 14px;">
+                  <span>{{childItem.title}}</span>
+                  <div class="bottom clearfix">
+                    <!-- <time class="time">{{ currentDate }}</time> -->
+                    <price class="price">￥{{childItem.price}}</price>
+                    <!-- <el-button type="text" class="button">操作按钮</el-button> -->
+                  </div>
+                </div>
+              </el-card>
           </li>
         </ul>
   </div>
+
 </div>
 </template>
 
@@ -107,15 +104,40 @@ export default {
       userId: sessionStorage.getItem('userId'),
       userInfo: sessionStorage.getItem('userInfo'),
       attenList: [],
-      fansList: []
+      fansList: [],
+      newList:[],
+      city:sessionStorage.getItem("city"),
+      cityGoodsList:[],
+      hotGoodsList:[]
     }
   },
   mounted () {
     this.getGoods()
     this.getAttenList()
     this.getFans()
+    this.getGoodsByCity()
+    this.getNew()
+    this.getHotGoods()
   },
   methods: {
+    getHotGoods(){
+      req("getHotGoods",{}).then(data => {
+        this.hotGoodsList = data.data.data
+      })
+    },
+    getNew(){
+      req('getNew',{}).then(data => {
+        this.newList = data.data.data
+      })
+    },
+    getGoodsByCity () {
+      req('getGoodsByCity', {cityName:this.city}).then(data => {
+        this.cityGoodsList = data.data.data
+      })
+    },
+    toClassify(sortId){
+      this.$router.push({path:'/classify',query: {sortId:sortId}})
+    },
     getGoods () {
       req('getGoods', {}).then(data => {
         this.goodsList = data.data.data
@@ -123,9 +145,17 @@ export default {
       this.userId = sessionStorage.getItem('userId')
       )
     },
-    getGoodsDetail (data) {
-      sessionStorage.setItem('goodsDetail', JSON.stringify(data))
-      this.$router.push({path: '/goodsDetail'})
+    getGoodsDetail (goodsId) {
+      // sessionStorage.setItem('goodsDetail', JSON.stringify(data))
+      // this.$router.push({path: '/goodsDetail'})
+      req('getGoodsDetail',{goodsId:goodsId}).then(data =>{
+            sessionStorage.setItem('goodsDetail', JSON.stringify(data.data.data))
+            this.$router.push({path: '/goodsDetail'})
+        })
+    },
+    getHomePage (userId) {
+      sessionStorage.setItem("homeUserId",userId)
+      this.$router.push({path: '/home-page'})
     },
     getAttenList () {
       req('getAttenGoodsList', {userId: this.userId}).then(data => {
@@ -137,11 +167,39 @@ export default {
         this.fansList = data.data.data
       })
     }
+    
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/global.scss";
+.price {
+    font-size: 16px;
+    color: rgb(255, 0, 0);
+  }
+  
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .image {
+    width: 100%;
+    // height: 150px;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  
+  .clearfix:after {
+      clear: both
+  }
+
 .firstLayer{
   display: flex;
   width: 95%;
@@ -188,7 +246,7 @@ export default {
   border-radius: 10px;
   margin-top: 10px;
   .content{
-    width: 50px;
+    // width: 50px;
     flex: 1;
     img{
       width: 30px;
@@ -198,6 +256,7 @@ export default {
       width: 100%;
     }
   }
+
 }
  .el-carousel__item img {
 width:50%; height:100%;  }
@@ -213,22 +272,23 @@ width:50%; height:100%;  }
     display: flex;
     width: 95%;
     margin: 0 auto;
-    margin-top: 10px;
+    margin-top: 0px;
   }
   .module-title {
   width: 100%;
   height: 40px;
   text-align: center;
   line-height: 40px;
-  color: #fff;
+  color:$pColor;
   background: #ddd;
   margin-top: 10px;
 }
 .showGoods{
-  width: 100%;
-  height: 350px;
+  width: 95%;
+  margin:0 auto;
+  margin-bottom: 50px;
 }
-.book-list {
+.goods-list {
         width: 100%;
         background: #fff;
         display: flex;
@@ -243,7 +303,6 @@ width:50%; height:100%;  }
           align-items: center;
           width: 50%;
           margin-bottom: 10px;
-
           img {
             width: 150px;
             height: 150px;

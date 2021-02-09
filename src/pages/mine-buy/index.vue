@@ -28,7 +28,7 @@ export default {
       })
     },
     toGoodsDetail (item) {
-      req('getGoodsQuery', {goodsId: item}).then(data => {
+      req('getGoodsDetail', {goodsId: item}).then(data => {
         this.goodsDetail = data.data.data
         sessionStorage.setItem('goodsDetail', JSON.stringify(this.goodsDetail))
         this.$router.push({path: 'goodsDetail'})
