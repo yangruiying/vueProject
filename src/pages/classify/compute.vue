@@ -74,7 +74,7 @@
 
   <div class="loan" v-show="loan">
     <el-card class="box-card">
-      <van-cell center title="全款花费总额" :value="price+parseFloat(carTax)+parseFloat(carService)+thirdPartyChoose+carLossChoose" label="裸车价+必要花费+商业保险" />
+      <van-cell center title="全款花费总额" :value="price+parseFloat(carTax)+parseFloat(carService)+thirdPartyChoose+carLossChoose+sumLoadMoney" label="裸车价+必要花费+商业保险" />
     </el-card>
   <van-collapse v-model="activeNames" >
   <van-collapse-item name="1" :is-link="false" disabled>
@@ -136,14 +136,14 @@
   <van-collapse-item name="1" :is-link="false" disabled>
     <template #title>
       <van-cell-group>
-        <van-field label="月供金额" :value="monthPay" readonly input-align="right"/>  
+        <van-field label="月供金额" :value="parseFloat((price+parseFloat(carTax)+parseFloat(carService)+thirdPartyChoose+carLossChoose+sumLoadMoney)/payTime).toFixed(2)" readonly input-align="right"/>  
       </van-cell-group>
     </template>
   </van-collapse-item>
   <van-collapse-item name="1" :is-link="false" disabled>
     <template #title>
       <van-cell-group>
-        <van-field label="利率" :value="loanInterest*100 + '%'" input-align="right" v-model="loanInterest" :formatter="formatter"/>  
+        <van-field label="利率"  input-align="right" v-model="loanInterest" :formatter="formatter" right-icon="http://xzsd-1301643402.cos.ap-beijing.myqcloud.com/2021021023522118748.jpg"/>  
       </van-cell-group>
     </template>
   </van-collapse-item>
@@ -187,10 +187,10 @@ export default {
       radio1:"",
       fullPayShow:true,
       loan:false,
-      loanInterest:0.0475,
+      loanInterest:4.75,
       monthPay:0,
-      payTime:12
-      
+      payTime:12,
+      sumLoadMoney:0
     }
   },
   mounted () {
@@ -198,10 +198,6 @@ export default {
     this.init()
   },
   methods: {
-    formatter(value) {
-      // 过滤输入的数字
-      return value.replace(/\d/g, '');
-    },
     getTapShow(index){
       if(index == 0){
           this.fullPayShow = true;
@@ -244,6 +240,12 @@ export default {
       }else{
         this.carLossChoose = 0
       }
+    },
+    payTime(value){
+      this.sumLoadMoney = this.price * this.loanInterest / 100 / 12 * value
+    },
+    loanInterest(value){
+      this.sumLoadMoney = this.price * value / 100 / 12 * this.payTime
     }
   }
 }
