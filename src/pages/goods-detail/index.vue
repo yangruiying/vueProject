@@ -74,7 +74,7 @@
 
 
 <div  v-if="isUserGoods === 0">
-    <el-footer>
+    <!-- <el-footer>
       <div>
        <div v-if="isFavor === 0"><img src="../../assets/weizan.png" class="icon"  @click="addFavor"></div>
        <div v-else><img src="../../assets/yizan.png" class="icon"  @click="delFavor"></div>
@@ -93,9 +93,20 @@
       </div>
       <el-button @click="toChat">客服</el-button>
       
-    </el-footer>
+    </el-footer> -->
 
-    
+  <van-goods-action>
+    <van-goods-action-icon icon="chat-o" text="留言"/>
+    <van-goods-action-icon v-if="isCollection === 0" @click="addCollection" icon="star-o" text="收藏"  />
+    <van-goods-action-icon v-else @click="delCollection" icon="star" text="已收藏" color="#ff5000" />
+    <van-goods-action-icon v-if="isFavor === 0" @click="addFavor" icon="thumb-circle-o" text="点赞" />
+    <van-goods-action-icon v-else @click="delFavor" icon="thumb-circle" text="点赞" color="#ff5000" />
+    <van-goods-action-button
+      type="danger"
+      text="联系客服"
+      @click="toChat"
+    />
+  </van-goods-action>
 
 </div>
   <div v-else>
@@ -232,7 +243,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .test{
   width: 100%;
   text-align: right;

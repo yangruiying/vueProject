@@ -3,6 +3,15 @@
   <!-- <div class="search">
     <el-input placeholder="请输入搜索内容"></el-input>
   </div> -->
+    <div class="topic">
+      <div class="title">帖子标safsafasfasf题asfsafasfasfasfasfasfsafasfasfasfasfasfasfasfsadasfsagsafbbb</div>
+      <div class="imgList">
+        <van-image fit="fill" src="https://img01.yzcdn.cn/vant/apple-1.jpg" />
+        <van-image fit="fill" src="https://img01.yzcdn.cn/vant/apple-1.jpg" />
+        <van-image fit="fill" src="https://img01.yzcdn.cn/vant/apple-1.jpg" />
+      </div>
+      <van-divider />
+  </div>
   <div class="sort">
     <div class="content">
       <img src="../../assets/shouji.png" @click="toClassify(1)">
@@ -141,6 +150,7 @@ export default {
     getGoods () {
       req('getGoods', {}).then(data => {
         this.goodsList = data.data.data
+        console.log(JSON.stringify(this.goodsList))
       },
       this.userId = sessionStorage.getItem('userId')
       )
@@ -174,6 +184,27 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
+.topic{
+  background: white;
+  padding: 20px;
+  padding-bottom: 1px;
+  .title{
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+    word-wrap:break-word;
+  }
+  .imgList{
+    margin-top: 10px;
+    height: 100px;
+    width: 100%;
+    display: flex;
+    .van-image{
+      flex:1
+    }
+    
+  }
+}
 .price {
     font-size: 16px;
     color: rgb(255, 0, 0);

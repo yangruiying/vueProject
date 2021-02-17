@@ -1,29 +1,50 @@
 <template>
   <div class="container">
   <van-tabs v-model="active">
-  <van-tab title="选车"></van-tab>
+  <van-tab title="选车">
+    <van-search v-model="value" placeholder="请输入搜索关键词" />
+    <van-grid :column-num="5">
+      <van-grid-item v-for="value in 10" :key="value" icon="photo-o" text="文字" />
+    </van-grid>
+    <van-index-bar>
+      <div v-for="(item,index) in first" :key="index">
+        <van-index-anchor :index="item.firstChar" />
+        <div v-for="(item,index) in item.firstSortList" :key="index">
+          <van-cell :title="item.name" style="text-align:left" :icon="item.carIcon" @click="toDetail(item.sortId)"/>
+        </div>
+      </div>
+    </van-index-bar>
+  </van-tab>
   <van-tab title="新能源"></van-tab>
-  <van-tab title="二手车"></van-tab>
+  <van-tab title="二手车">
+  <div class="showGoods" >
+    <ul class="goods-list" style="background: rgb(241, 239, 235);">
+          <li v-for="(childItem, childIndex) in goodsList" :key="childIndex" @click="getGoodsDetail(childItem.goodsId)">
+              <el-card  :body-style="{ padding: '0px' }">
+                <img :src="childItem.indexPath" class="image">
+                <div style="padding: 14px;">
+                  <span>{{childItem.title}}</span>
+                  <div class="bottom clearfix">
+                    <!-- <time class="time">{{ currentDate }}</time> -->
+                    <price class="price">￥{{childItem.price}}</price>
+                    <!-- <el-button type="text" class="button">操作按钮</el-button> -->
+                  </div>
+                </div>
+              </el-card>
+          </li>
+        </ul>
+  </div>
+  </van-tab>
   <van-tab title="新车热卖"></van-tab>
 </van-tabs>
-  <van-search v-model="value" placeholder="请输入搜索关键词" />
-  <van-grid :column-num="5">
-  <van-grid-item v-for="value in 10" :key="value" icon="photo-o" text="文字" />
-</van-grid>
-  <van-index-bar>
-    <div v-for="(item,index) in first" :key="index">
-      <van-index-anchor :index="item.firstChar" />
-      <div v-for="(item,index) in item.firstSortList" :key="index">
-        <van-cell :title="item.name" style="text-align:left" :icon="item.carIcon" @click="toDetail(item.sortId)"/>
-      </div>
-    </div>
-  </van-index-bar>
+  
   </div>
 </template>
 
 <script>
 
 import req from '@/api/sort.js'
+import req2 from '@/api/goods.js'
 export default{
   name: 'classify',
   data () {
@@ -35,13 +56,30 @@ export default{
       ],
       first: [],
       second: [],
-      currentClassify: {}
+      currentClassify: {},
+      goodsList:[]
     }
   },
   mounted () {
-    this.getFirstSort()
+    this.getFirstSort(),
+    this.getGoods()
   },
   methods: {
+    getGoodsDetail (goodsId) {
+      // sessionStorage.setItem('goodsDetail', JSON.stringify(data))
+      // this.$router.push({path: '/goodsDetail'})
+      req('getGoodsDetail',{goodsId:goodsId}).then(data =>{
+            sessionStorage.setItem('goodsDetail', JSON.stringify(data.data.data))
+            this.$router.push({path: '/goodsDetail'})
+        })
+    },
+    getGoods () {
+      req2('getGoods', {}).then(data => {
+        this.goodsList = data.data.data
+      },
+      this.userId = sessionStorage.getItem('userId')
+      )
+    },
     toDetail(id){
       this.$router.push({path:'classifyList',query:{id:id}})
     },
@@ -78,6 +116,52 @@ export default{
 
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
+.showGoods{
+  width: 95%;
+  margin:0 auto;
+  margin-bottom: 50px;
+}
+.goods-list {
+        width: 100%;
+        background: #fff;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 10px 0;
+        box-sizing: border-box;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+          width: 50%;
+          margin-bottom: 10px;
+          img {
+            width: 150px;
+            height: 150px;
+          }
+
+          div:nth-child(2) {
+            font-size: 12px;
+          }
+
+          div:nth-child(3) {
+            color: red;
+            font-size: 14px;
+            font-weight: bold;
+
+            span {
+              color: #ddd;
+              font-weight: normal;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+      .icon-jiazai{
+        font-size: 200px;
+        color: royalblue;
+      }
 .van-cell {
   line-height:40px
 }

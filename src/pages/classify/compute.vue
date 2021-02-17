@@ -10,7 +10,7 @@
   </van-nav-bar>
   <div class="fullPay" v-show="fullPayShow">
     <el-card class="box-card">
-      <van-cell center title="全款花费总额" :value="price+parseFloat(carTax)+parseFloat(carService)+thirdPartyChoose+carLossChoose" label="裸车价+必要花费+商业保险" />
+      <van-cell center title="全款花费总额" :value="parseInt(price+parseFloat(carTax)+parseFloat(carService)+thirdPartyChoose+carLossChoose)" label="裸车价+必要花费+商业保险" />
     </el-card>
   <van-collapse v-model="activeNames" >
   <van-collapse-item name="1" disabled :is-link="false">
@@ -74,7 +74,18 @@
 
   <div class="loan" v-show="loan">
     <el-card class="box-card">
-      <van-cell center title="全款花费总额" :value="price+parseFloat(carTax)+parseFloat(carService)+thirdPartyChoose+carLossChoose+sumLoadMoney" label="裸车价+必要花费+商业保险" />
+      <van-cell center title="贷款花费总额" :value="parseInt(price+parseFloat(carTax)+parseFloat(carService)+thirdPartyChoose+carLossChoose+sumLoadMoney)" label="裸车价+必要花费+商业保险" />
+      <van-divider />
+      <van-row style="margin-left:10px">
+        <van-col span="8" class="smallFont">首付总额</van-col>
+        <van-col span="8" class="smallFont">贷款总额</van-col>
+        <van-col span="8" class="smallFont">多花费</van-col>
+      </van-row>
+      <van-row style="margin-left:10px">
+        <van-col span="8">{{price*firstPay}}</van-col>
+        <van-col span="8">{{price - (price * firstPay)}}</van-col>
+        <van-col span="8">{{parseInt(sumLoadMoney)}}</van-col>
+      </van-row>
     </el-card>
   <van-collapse v-model="activeNames" >
   <van-collapse-item name="1" :is-link="false" disabled>
@@ -133,6 +144,25 @@
     @change="onChange"
   />
   </van-popup>
+    <van-collapse-item name="1" :is-link="false" disabled>
+    <template #title>
+      <van-cell-group>
+        <van-field label="首付额度" :value="firstPay* 100 +'%'" readonly input-align="right"/>  
+      </van-cell-group>
+    </template>
+  </van-collapse-item>
+  <el-row>
+    <el-col :span="2" :offset="2"><span style="font-size:14px;line-height:2"  class="smallFont">比例</span></el-col>
+    <el-col :span="20">
+      <div>
+        <el-radio v-model="firstPay" :label="0.3" border size="small">30%</el-radio>
+        <el-radio v-model="firstPay" :label="0.4" border size="small">40%</el-radio>
+        <el-radio v-model="firstPay" :label="0.5" border size="small">50%</el-radio>
+        <el-radio v-model="firstPay" :label="0.6" border size="small">60%</el-radio>
+        <el-radio v-model="firstPay" :label="0.8" border size="small">80%</el-radio>
+      </div>
+    </el-col>
+  </el-row>
   <van-collapse-item name="1" :is-link="false" disabled>
     <template #title>
       <van-cell-group>
@@ -140,17 +170,8 @@
       </van-cell-group>
     </template>
   </van-collapse-item>
-  <van-collapse-item name="1" :is-link="false" disabled>
-    <template #title>
-      <van-cell-group>
-        <van-field label="利率"  input-align="right" v-model="loanInterest" :formatter="formatter" right-icon="http://xzsd-1301643402.cos.ap-beijing.myqcloud.com/2021021023522118748.jpg"/>  
-      </van-cell-group>
-    </template>
-  </van-collapse-item>
-  </van-collapse>
   <el-row>
-    <el-col :span="2"></el-col>
-    <el-col :span="2" :offset="1"><span style="font-size:14px;line-height:2">期限</span></el-col>
+    <el-col :span="2" :offset="2"><span style="font-size:14px;line-height:2"  class="smallFont">期限</span></el-col>
     <el-col :span="20">
       <div>
         <el-radio v-model="payTime" :label="12" border size="small">12期</el-radio>
@@ -161,6 +182,15 @@
       </div>
     </el-col>
   </el-row>
+  <van-collapse-item name="1" :is-link="false" disabled>
+    <template #title>
+      <van-cell-group>
+        <van-field label="利率"  input-align="right" v-model="loanInterest" :formatter="formatter" right-icon="http://xzsd-1301643402.cos.ap-beijing.myqcloud.com/2021021023522118748.jpg"/>  
+      </van-cell-group>
+    </template>
+  </van-collapse-item>
+  </van-collapse>
+  
   </div>
 </div>
 </template>
@@ -190,7 +220,8 @@ export default {
       loanInterest:4.75,
       monthPay:0,
       payTime:12,
-      sumLoadMoney:0
+      sumLoadMoney:0,
+      firstPay:0.3
     }
   },
   mounted () {
@@ -221,11 +252,17 @@ export default {
       this.insurance = this.price*0.005
       this.thirdParty = 50000 * 0.008,
       this.monthPay = this.price/this.payTime
+      this.sumLoadMoney = (this.price -(this.price * this.firstPay)) * this.loanInterest / 100 / 12 * this.payTime
     },
     onConfirm(name,index){
       this.columnsChoose = name
       this.show = false,
       this.thirdParty = this.columnsIndex[index]*0.008
+      if (this.insuranceList.indexOf('a')!=-1) {
+         this.thirdPartyChoose = this.thirdParty
+      }else{
+        this.thirdPartyChoose = 0
+      }
     }
   },
   watch:{
@@ -242,10 +279,13 @@ export default {
       }
     },
     payTime(value){
-      this.sumLoadMoney = this.price * this.loanInterest / 100 / 12 * value
+      this.sumLoadMoney = (this.price -(this.price * this.firstPay)) * this.loanInterest / 100 / 12 * value
     },
     loanInterest(value){
-      this.sumLoadMoney = this.price * value / 100 / 12 * this.payTime
+      this.sumLoadMoney = (this.price -(this.price * this.firstPay)) * value / 100 / 12 * this.payTime
+    },
+    firstPay(value){
+      this.sumLoadMoney = (this.price -(this.price * value)) * this.loanInterest / 100 / 12 * this.payTime
     }
   }
 }
@@ -253,6 +293,12 @@ export default {
 
 
 <style lang="scss">
+.smallFont{
+  margin-top: 4px;
+  color: #969799;
+  font-size: 12px;
+  line-height: 18px;
+}
 .el-radio__input{
   display: none;
 }
@@ -321,6 +367,9 @@ export default {
   width: 60px;
   line-height: 45px;
   font-weight: bold;
+}
+.van-cell__title, .van-cell__value {
+  width: 100px;
 }
 }
 </style>
