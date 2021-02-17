@@ -137,6 +137,21 @@ export default new Router({
           }
         },
         {
+          path: '/classifySearch',
+          name: 'classifySearch',
+          component: () => import('@/pages/classify/carSearch.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '分类',
+                toPath: '/classify'
+              }
+            ],
+            headerHide: true,
+            footerShow: false
+          }
+        },
+        {
           path: '/compute',
           name: 'compute',
           component: () => import('@/pages/classify/compute.vue'),

@@ -3,12 +3,22 @@
   <!-- <div class="search">
     <el-input placeholder="请输入搜索内容"></el-input>
   </div> -->
-    <div class="topic">
-      <div class="title">帖子标safsafasfasf题asfsafasfasfasfasfasfsafasfasfasfasfasfasfasfsadasfsagsafbbb</div>
+    <div class="topic" v-for="(item,index) in goodsList" :key="index">
+      <div class="usrInfo">
+        <van-image
+          round
+          width="50px"
+          height="50px"
+          :src="item.imagePath"
+          fit="fill"
+        />
+        <div class="userName">
+          {{item.userName}}
+        </div>
+      </div>
+      <div class="title">{{item.title}}</div>
       <div class="imgList">
-        <van-image fit="fill" src="https://img01.yzcdn.cn/vant/apple-1.jpg" />
-        <van-image fit="fill" src="https://img01.yzcdn.cn/vant/apple-1.jpg" />
-        <van-image fit="fill" src="https://img01.yzcdn.cn/vant/apple-1.jpg" />
+        <van-image v-for="(item2,index2) in item.imgLists" :key="index2" fit="fill" :src="item2.url" />
       </div>
       <van-divider />
   </div>
@@ -202,8 +212,15 @@ export default {
     .van-image{
       flex:1
     }
-    
   }
+ /deep/ .usrInfo{
+   display: flex;
+       .van-image{
+      width: 50px;
+      height: 50px;
+      }
+      
+    }
 }
 .price {
     font-size: 16px;

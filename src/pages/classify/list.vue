@@ -1,7 +1,7 @@
 <template>
   <div class="container">
  <van-nav-bar
-  title="宝马"
+  :title="title"
   left-text="返回"
   right-text="按钮"
   left-arrow
@@ -19,7 +19,7 @@
 <van-card
   v-for="(item,index) in second" :key="index"
   @click="toDetail(item.sortId,item.carIcon)"
-  desc="描述信息"
+  :desc="item.minPrice+'-'+item.maxPrice"
   :title="item.name"
   tag="在售"
   :thumb="item.carIcon"
@@ -45,6 +45,7 @@ export default{
       currentClassify: {},
       sortList:[],
       id:this.$route.query.id,
+      title:this.$route.query.name,
       loadData:{
         sortId:this.$route.query.id,
         status:"",
@@ -72,6 +73,7 @@ export default{
       this.currentClassify = item
       req('getSecondSort', this.loadData).then(data => {
         this.second = data.data.data
+        console.log(JSON.stringify(this.second))
       })
     },
     getCommDetail (goodsId) {
@@ -101,6 +103,17 @@ export default{
 
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
+.van-card__desc{
+  color:rgb(255, 94, 0);
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 20px;
+}
+.van-card__title{
+  color: black;
+  font-weight: bold;
+  font-size: 15px;
+}
 .van-cell {
   line-height:40px
 }

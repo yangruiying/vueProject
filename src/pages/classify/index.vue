@@ -3,17 +3,47 @@
   <van-tabs v-model="active">
   <van-tab title="选车">
     <van-search v-model="value" placeholder="请输入搜索关键词" />
-    <van-grid :column-num="5">
-      <van-grid-item v-for="value in 10" :key="value" icon="photo-o" text="文字" />
+    <van-grid :column-num="4">
+      <van-grid-item v-for="value in topList" :key="value" :icon="value.carIcon" :text="value.name"  @click="toDetail(value.sortId,value.name)"/>
     </van-grid>
-    <van-index-bar>
+    <van-grid :column-num="4">
+      <van-grid-item @click="$router.push({path:'classifySearch',query:{value3:1}})">
+        <el-radio v-model="firstPay" :label="0.3" border size="small">5-8万</el-radio>
+      </van-grid-item>
+      <van-grid-item @click="$router.push({path:'classifySearch',query:{value3:2}})">
+        <el-radio v-model="firstPay" :label="0.3" border size="small">8-15万</el-radio>
+      </van-grid-item>
+      <van-grid-item @click="$router.push({path:'classifySearch',query:{value3:3}})">
+        <el-radio v-model="firstPay" :label="0.3" border size="small">15-20万</el-radio>
+      </van-grid-item>
+      <van-grid-item @click="$router.push({path:'classifySearch',query:{value3:4}})">
+        <el-radio v-model="firstPay" :label="0.3" border size="small">20-30万</el-radio>
+      </van-grid-item>
+    </van-grid>
+    <van-grid :column-num="4">
+      <van-grid-item @click="$router.push({path:'classifySearch',query:{value1:0}})">
+        <el-radio v-model="firstPay" :label="0.3" border size="small">轿车</el-radio>
+      </van-grid-item>
+      <van-grid-item @click="$router.push({path:'classifySearch',query:{value1:1}})">
+        <el-radio v-model="firstPay" :label="0.3" border size="small">SUV</el-radio>
+      </van-grid-item>
+      <van-grid-item @click="$router.push({path:'classifySearch',query:{value1:2}})">
+        <el-radio v-model="firstPay" :label="0.3" border size="small">跑车</el-radio>
+      </van-grid-item>
+      <van-grid-item @click="$router.push({path:'classifySearch'})">
+        <el-radio v-model="firstPay" :label="0.3" border size="small">更多条件</el-radio>
+      </van-grid-item>
+    </van-grid>
+    
+      <van-index-bar style="padding-bottom:60px">
       <div v-for="(item,index) in first" :key="index">
         <van-index-anchor :index="item.firstChar" />
         <div v-for="(item,index) in item.firstSortList" :key="index">
-          <van-cell :title="item.name" style="text-align:left" :icon="item.carIcon" @click="toDetail(item.sortId)"/>
+          <van-cell :title="item.name" style="text-align:left" :icon="item.carIcon" @click="toDetail(item.sortId,item.name)"/>
         </div>
       </div>
     </van-index-bar>
+    
   </van-tab>
   <van-tab title="新能源"></van-tab>
   <van-tab title="二手车">
@@ -57,14 +87,22 @@ export default{
       first: [],
       second: [],
       currentClassify: {},
-      goodsList:[]
+      goodsList:[],
+      topList:[]
     }
   },
   mounted () {
     this.getFirstSort(),
-    this.getGoods()
+    this.getGoods(),
+    this.getTopCar()
   },
   methods: {
+    getTopCar(){
+      req('getTopCar',).then(data =>{
+            this.topList = data.data.data;
+            console.log(JSON.stringify(this.topList))
+        })
+    },
     getGoodsDetail (goodsId) {
       // sessionStorage.setItem('goodsDetail', JSON.stringify(data))
       // this.$router.push({path: '/goodsDetail'})
@@ -80,8 +118,8 @@ export default{
       this.userId = sessionStorage.getItem('userId')
       )
     },
-    toDetail(id){
-      this.$router.push({path:'classifyList',query:{id:id}})
+    toDetail(id,name){
+      this.$router.push({path:'classifyList',query:{id:id,name:name}})
     },
     getFirstSort () {
       req('getFirstSort', {}).then(data => {
@@ -116,10 +154,59 @@ export default{
 
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
+/deep/ .van-grid-item__content{
+  padding: 10px 2px;
+}
+.van-grid{
+  width: 95%;
+  margin: 0 auto;
+  margin-right: 16px;
+}
+.smallFont{
+  margin-top: 4px;
+  color: #969799;
+  font-size: 12px;
+  line-height: 18px;
+}
+/deep/ .el-radio__input{
+  display: none;
+}
+/deep/.el-radio{
+  margin-right: 0px;
+}
+/deep/.el-radio--small.is-bordered{
+  padding: 6px 10px 0 3px;
+  border-radius: 3px;
+  height: 26px;
+  margin-right: -5px;
+  background: rgb(240, 240, 240);
+}
 .showGoods{
   width: 95%;
   margin:0 auto;
   margin-bottom: 50px;
+}
+.van-cell {
+  line-height:40px
+}
+/deep/ .van-index-anchor{
+  text-align: left;
+  background-color:#e9e9e9
+}
+.van-icon__image{
+  width: 40px;
+  height: 40px;
+}
+.price {
+          font-size: 16px;
+          color: rgb(255, 0, 0);
+        }
+.container {
+  position: absolute;
+  top: 0px;
+  bottom: 0;
+  width: 100%;
+  height: 630px;
 }
 .goods-list {
         width: 100%;
@@ -158,129 +245,4 @@ export default{
           }
         }
       }
-      .icon-jiazai{
-        font-size: 200px;
-        color: royalblue;
-      }
-.van-cell {
-  line-height:40px
-}
-/deep/ .van-index-anchor{
-  text-align: left;
-  background-color:#e9e9e9
-}
-.van-icon__image{
-  width: 40px;
-  height: 40px;
-}
-.price {
-          font-size: 16px;
-          color: rgb(255, 0, 0);
-        }
-.container {
-  position: absolute;
-  top: 0px;
-  bottom: 0;
-  width: 100%;
-  height: 630px;
-  .book-classify {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 20%;
-    background: #fff;
-
-    li {
-      position: relative;
-      width: 100%;
-      height: 40px;
-      text-align: center;
-      line-height: 40px;
-      font-size: 14px;
-
-      >span {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-      }
-      
-
-    }
-    li.active {
-      color: $pColor;
-      background: #ddd;
-
-      b {
-        position: absolute;
-        left: 0;
-        top: 50%;
-        width: 3px;
-        height: 20px;
-        background:$pColor;
-        margin-top: -10px;
-      }
-    }
-  }
-
-  .book-classify-conteiner {
-    position: absolute;
-    top: 0;
-    left: 22%;
-    bottom: 0;
-    overflow: auto;
-    width: 78%;
-    margin-bottom: 0px;
-    .book-classify-item {
-      .book-classify-item-title {
-        // background: rgb(125, 134, 138);
-        width: 100%;
-        height: 40px;
-        padding-left: 10px;
-        box-sizing: border-box;
-        line-height: 40px;
-      }
-
-      .book-list {
-        width: 100%;
-        background: #fff;
-        display: flex;
-        flex-wrap: wrap;
-        padding: 10px 0;
-        box-sizing: border-box;
-
-        li {
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: center;
-          width: 40%;
-          margin-bottom: 10px;
-          margin-bottom: 10px;
-          margin-right: 25px;
-          img {
-            width: 130px;
-            height: 130px;
-          }
-
-          div:nth-child(2) {
-            font-size: 12px;
-          }
-
-          div:nth-child(3) {
-            color: red;
-            font-size: 14px;
-            font-weight: bold;
-
-            span {
-              color: #ddd;
-              font-weight: normal;
-              font-size: 12px;
-            }
-          }
-        }
-      }
-    }
-  }
-}
 </style>

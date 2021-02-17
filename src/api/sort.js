@@ -16,6 +16,14 @@ const config = {
   getCarSort:{
     url:'/sort/getCarSort',
     method:'post'
+  },
+  getTopCar:{
+    url:'/sort/getTopCar',
+    method:'post'
+  },
+  searchCar:{
+    url:'/sort/searchCar',
+    method:'post'
   }
 }
 

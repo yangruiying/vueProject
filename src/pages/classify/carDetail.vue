@@ -14,6 +14,13 @@
   fit="fill"
   :src="carIcon"
 />
+<div>
+  <div>标题</div>
+  <van-grid :column-num="2">
+  <van-grid-item icon="comment" color="#1989fa" text="论坛"/>
+  <van-grid-item icon="exchange" text="二手车价" />
+</van-grid>
+</div>
 <van-card
   v-for="(item,index) in carList" :key="index"
   :price="item.price"
