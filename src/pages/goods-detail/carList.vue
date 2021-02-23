@@ -59,15 +59,7 @@ export default{
   },
   methods: {
     toDetail(sortId,carIcon,name){
-      let path
-      if (this.$route.query.toPath == 1) {
-        path = "secondCarList"
-      }else if (this.$route.query.toPath == 2) {
-        path = "topicAdd"
-      }else{
-        path = "carDetail"
-      }
-      this.$router.push({path:path,query:{firstSortId:this.id,firstSortName:this.title,sortId:sortId,carIcon:carIcon,name:name,}})
+      this.$router.push({path:"secondCarList",query:{firstSortId:this.id,firstSortName:this.title,sortId:sortId,carIcon:carIcon,name:name}})
     },
     changeStatus(name,title){
       this.loadData.status = name;

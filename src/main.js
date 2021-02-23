@@ -10,11 +10,21 @@ import animated from 'animate.css'
 import config from './config.js'
 import Vant from 'vant';
 import 'vant/lib/index.css';
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';
+import MuseUI from 'muse-ui';
+import 'muse-ui/dist/muse-ui.css';
+
+Vue.use(MuseUI);
+
+Vue.use(ViewUI);
 Vue.prototype.config = config
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(animated)
 Vue.use(Vant)
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

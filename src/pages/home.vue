@@ -18,12 +18,14 @@
           </span>
         </div>
       </el-header>
+
+      
       <el-footer v-show="meta.footerShow">
          <!-- 店长 -->
         <div @click="$router.push({path: '/comm-home'})">
           <!-- <img v-show="currentPath !== '/comm-home'" src="../assets/u1075.png" alt=""> -->
           <span class="iconfont icon-shouye" :style="{color: currentPath === '/comm-home' || currentPath === '/attention' || currentPath === '/location' ? config.pColor : '#333333'}"></span>
-          <div :style="{color: currentPath === '/comm-home' || currentPath === '/attention'  || currentPath === '/location'  ? config.pColor : '#333333'}">首页</div>
+          <div :style="{color: currentPath === '/comm-home' || currentPath === '/attention'  || currentPath === '/location'  ? config.pColor : '#333333'}">论坛</div>
         </div>
         <div @click="$router.push({path: '/classify'})">
           <!-- <img v-show="currentPath !== '/comm-home'" src="../assets/u1075.png" alt=""> -->

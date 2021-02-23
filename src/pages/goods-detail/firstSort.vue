@@ -45,9 +45,8 @@
     </van-index-bar>
     
   </van-tab>
-  
-  <van-tab title="二手车" v-if="$route.query.toPath == null">
-   
+  <van-tab title="新能源"></van-tab>
+  <van-tab title="二手车">
   <div class="showGoods" >
     <ul class="goods-list" style="background: rgb(241, 239, 235);">
           <li v-for="(childItem, childIndex) in goodsList" :key="childIndex" @click="getGoodsDetail(childItem.goodsId)">
@@ -66,6 +65,7 @@
         </ul>
   </div>
   </van-tab>
+  <van-tab title="新车热卖"></van-tab>
 </van-tabs>
   
   </div>
@@ -119,7 +119,7 @@ export default{
       )
     },
     toDetail(id,name){
-      this.$router.push({path:'classifyList',query:{id:id,name:name,toPath:this.$route.query.toPath}})
+      this.$router.push({path:'carList',query:{id:id,name:name}})
     },
     getFirstSort () {
       req('getFirstSort', {}).then(data => {

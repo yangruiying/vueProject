@@ -1,7 +1,7 @@
 <template>
   <div class="container">
   <van-nav-bar
-  title="宝马"
+  :title="name"
   left-text="返回"
   right-text="按钮"
   left-arrow
@@ -9,16 +9,15 @@
   @click-right="onClickRight"
 />
 <van-image
-  width="10rem"
-  height="10rem"
   fit="fill"
   :src="carIcon"
+  class="carImg"
 />
 <div>
-  <div>标题</div>
+  <div>{{name}}</div>
   <van-grid :column-num="2">
-  <van-grid-item icon="comment" color="#1989fa" text="论坛"/>
-  <van-grid-item icon="exchange" text="二手车价" />
+  <van-grid-item icon="comment" color="#1989fa" text="论坛" @click="toTopic"/>
+  <van-grid-item icon="exchange" text="二手车价"  @click="toSecondCar"/>
 </van-grid>
 </div>
 <van-card
@@ -26,7 +25,7 @@
   :price="item.price"
   :desc="item.intro"
   :title="item.title"
-  thumb="https://img01.yzcdn.cn/vant/ipad.jpeg"
+  :thumb="item.indexPath"
 >
   <template #tags>
     <van-tag plain type="danger">标签</van-tag>
@@ -47,8 +46,12 @@ import req from '@/api/goods.js'
 export default {
   data () {
     return {
-      sortId:this.$route.query.sortId,
+      
       carIcon:this.$route.query.carIcon,
+      sortId:this.$route.query.sortId,
+      name:this.$route.query.name,
+      firstSortId:this.$route.query.firstSortId,
+      firstSortName:this.$route.query.firstSortName,
       carList:[]
     }
   },
@@ -56,8 +59,14 @@ export default {
     this.getData()
   },
   methods: {
+    toSecondCar(){
+      this.$router.push({path:"/classify",query:{firstSortId:this.firstSortId,firstSortName:this.firstSortName,sortId:this.sortId,name:this.name,toPath:1}})
+    },
+    toTopic(){
+      this.$router.push({path:"/topList",query:{topicTitle:this.name,sortId:this.sortId}})
+    },
     getData(){
-      req('getGoodsBySortId',{sortId:this.sortId}).then(data =>{
+      req('getGoodsBySortId',{sortId:this.sortId,type:1}).then(data =>{
             this.carList = data.data.data
         })
     },
@@ -69,14 +78,14 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" >
  .container {
   position: absolute;
   top: 0;
   width: 100%;
 }
- .van-image{
-  width: 100% !important
+ .carImg{
+  
 }
 .van-button--round{
   border-radius: 10px;

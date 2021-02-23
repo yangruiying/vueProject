@@ -3,6 +3,7 @@
   <!-- <div class="search">
     <el-input placeholder="请输入搜索内容"></el-input>
   </div> -->
+  <div class="topicTitle">{{topicTitle}}论坛</div>
     <div class="topic" v-for="(item,index) in goodsList" :key="index">
       <div class="usrInfo">
         <van-image
@@ -21,10 +22,11 @@
       </div>
       </div>
       <div style="margin-top:10px;font-size:10px;text-align:left">
-            <Time :time="new Date(item.updateTime).getTime()" />
+            {{item.updateTime}}
       </div>
       <van-divider />
   </div>
+
 </div>
 </template>
 
@@ -52,7 +54,8 @@ export default {
       city:sessionStorage.getItem("city"),
       cityGoodsList:[],
       hotGoodsList:[],
-      time1: (new Date()).getTime() - 60 * 3 * 10000,
+      topicTitle:this.$route.query.topicTitle,
+      sortId:this.$route.query.sortId,
     }
   },
   mounted () {
@@ -83,7 +86,8 @@ export default {
       this.$router.push({path:'/classify',query: {sortId:sortId}})
     },
     getGoods () {
-      req('getGoods', {}).then(data => {
+      this.$route.meta.title[0].titleName="奥迪A4L论坛"
+      req('getGoods', {type:3,sortId:this.sortId}).then(data => {
         this.goodsList = data.data.data
         console.log(JSON.stringify(this.goodsList))
       },
@@ -111,7 +115,7 @@ export default {
       req('getFans',{}).then(data => {
         this.fansList = data.data.data
       })
-    }
+    },
     
   }
 }
@@ -119,8 +123,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
-.topicImg{
-  margin: 5px;
+.topicTitle{
+  font-size: 23px;
+  text-align: left;
+  padding-left: 20px;
+  background: white;
+  font-weight: bold;
 }
 .van-divider{
   border-color: gray;
@@ -138,7 +146,7 @@ export default {
   }
   .imgList{
     margin-top: 10px;
-    height: 100px;
+    height: 130px;
     width: 100%;
     display: flex;
     .van-image{
@@ -166,159 +174,5 @@ export default {
       }
     }
 }
-.price {
-    font-size: 16px;
-    color: rgb(255, 0, 0);
-  }
-  
-  .bottom {
-    margin-top: 13px;
-    line-height: 12px;
-  }
 
-  .image {
-    width: 100%;
-    // height: 150px;
-    display: block;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-      display: table;
-      content: "";
-  }
-  
-  .clearfix:after {
-      clear: both
-  }
-
-.firstLayer{
-  display: flex;
-  width: 95%;
-  flex-wrap: wrap;
-  border-radius: 10px;
-  margin: 0 auto;
-  background:white;
-  margin-top: 10px;
-  .a1-1{
-    width: 50%;
-    height: 100px;
-    .getImage{
-      width: 80%;
-      margin: 0 auto;
-      display: flex;
-      height: 30px;
-      flex-wrap: wrap;
-      div{       
-        width: 50%;
-        height: 80px;
-        .leftImg{
-          width: 100%;
-          height: 100%;
-          border-bottom-left-radius: 10px;
-          border-top-left-radius: 10px;
-        }
-        .rightImg{
-          width: 100%;
-          height: 100%;
-          border-bottom-right-radius: 10px;
-          border-top-right-radius: 10px;
-        }
-      }
-    }
-  }
-}
-.sort{
-  width: 90%;
-  display: flex;
-  margin-top: 30px;
-  background:white;
-  margin: 0 auto;
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 10px;
-  .content{
-    // width: 50px;
-    flex: 1;
-    img{
-      width: 30px;
-      height: 30px;
-    }
-    span{
-      width: 100%;
-    }
-  }
-
-}
- .el-carousel__item img {
-width:50%; height:100%;  }
-
-  .el-carousel__item:nth-child(2n) {
-     background-color: #99a9bf;
-  }
-
-  .el-carousel__item:nth-child(2n+1) {
-     background-color: #d3dce6;
-  }
-  .search{
-    display: flex;
-    width: 95%;
-    margin: 0 auto;
-    margin-top: 0px;
-  }
-  .module-title {
-  width: 100%;
-  height: 40px;
-  text-align: center;
-  line-height: 40px;
-  color:$pColor;
-  background: #ddd;
-  margin-top: 10px;
-}
-.showGoods{
-  width: 95%;
-  margin:0 auto;
-  margin-bottom: 50px;
-}
-.goods-list {
-        width: 100%;
-        background: #fff;
-        display: flex;
-        flex-wrap: wrap;
-        padding: 10px 0;
-        box-sizing: border-box;
-
-        li {
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: center;
-          width: 50%;
-          margin-bottom: 10px;
-          img {
-            width: 150px;
-            height: 150px;
-          }
-
-          div:nth-child(2) {
-            font-size: 12px;
-          }
-
-          div:nth-child(3) {
-            color: red;
-            font-size: 14px;
-            font-weight: bold;
-
-            span {
-              color: #ddd;
-              font-weight: normal;
-              font-size: 12px;
-            }
-          }
-        }
-      }
-      .icon-jiazai{
-        font-size: 200px;
-        color: royalblue;
-      }
 </style>

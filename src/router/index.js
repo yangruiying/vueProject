@@ -182,6 +182,51 @@ export default new Router({
           }
         },
         {
+          path: '/topList',
+          name: 'topList',
+          component: () => import('@/pages/topic/index.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '分类',
+                toPath: '/classify'
+              }
+            ],
+            headerHide: false,
+            footerShow: false
+          }
+        },
+        {
+          path: '/topicAdd',
+          name: 'topicAdd',
+          component: () => import('@/pages/topic/topicAdd.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '分类',
+                toPath: '/classify'
+              }
+            ],
+            headerHide: true,
+            footerShow: false
+          }
+        },
+        {
+          path: '/topicDetail',
+          name: 'topicDetail',
+          component: () => import('@/pages/topic/topicDetail.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '帖子详情',
+                toPath: '/classify'
+              }
+            ],
+            headerHide: false,
+            footerShow: false
+          }
+        },
+        {
           path: '/message',
           name: 'message',
           component: () => import('@/pages/message/index.vue'),
@@ -222,6 +267,51 @@ export default new Router({
             ],
             goBack: '/comm-home',
             headerHide: false,
+            goBackShow: true
+          }
+        },
+        {
+          path: '/firstSort',
+          name: 'firstSort',
+          component: () => import('@/pages/goods-detail/firstSort.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '商品详情'
+              }
+            ],
+            goBack: '/comm-home',
+            headerHide: false,
+            goBackShow: true
+          }
+        },
+        {
+          path: '/carList',
+          name: 'carList',
+          component: () => import('@/pages/goods-detail/carList.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '商品详情'
+              }
+            ],
+            goBack: '/comm-home',
+            headerHide: true,
+            goBackShow: true
+          }
+        },
+        {
+          path: '/secondCarList',
+          name: 'secondCarList',
+          component: () => import('@/pages/goods-detail/secondCarList.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '商品详情'
+              }
+            ],
+            goBack: '/comm-home',
+            headerHide: true,
             goBackShow: true
           }
         },

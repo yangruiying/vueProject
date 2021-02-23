@@ -317,9 +317,15 @@ export default {
   font-size: 10px;
   }
 }
+.van-collapse{
+  margin-top: 10px;
+}
+.van-collapse-item__content{
 .van-cell{
   background: none;
 }
+}
+
 .van-checkbox{
   background: rgb(248, 248, 248);
   padding: 5px;
@@ -334,9 +340,6 @@ export default {
   position: absolute;
   top: 0;
   width: 100%;
-}
- .van-image{
-  width: 100% !important
 }
 .van-button--round{
   border-radius: 10px;
