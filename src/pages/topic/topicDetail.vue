@@ -1,7 +1,16 @@
 <template>
-  <div>
-    <div class="title">
-      <h2>{{goodsDetail.title}}</h2>
+  <div style="height:100vh;background:white">
+    <van-nav-bar
+    
+      title="帖子详情"
+      left-text="返回"
+      left-arrow
+      @click-left="$router.go(-1)"
+      @click-right="publish()"
+      
+    />
+    <div class="Topictitle">
+      {{goodsDetail.title}}
     </div>
    <div class="userInfo">
       <van-image
@@ -43,7 +52,7 @@
           <div class="addMessage">
             
             <div class="getInput" ><el-input v-model="message" placeholder="感兴趣请留言"></el-input></div>
-            <el-button @click="addLeaveMessage">提交留言</el-button>
+            <el-button @click="addLeaveMessage" type="primary">提交留言</el-button>
            
           </div>
           
@@ -72,7 +81,7 @@
               
                >
                 <el-input :placeholder="'回复@'+data.userName" v-model="recoverMessage"></el-input>
-                <el-button @click="addRecover(data.lId)">提交回复</el-button>
+                <el-button @click="addRecover(data.lid)">提交回复</el-button>
              <el-button slot="reference" type="primary" class="recover" style="left: 0;">回复</el-button>
             </el-popover>
           </div>
@@ -120,7 +129,7 @@
     <van-goods-action-icon v-else @click="delCollection" icon="star" text="已收藏" color="#ff5000" />
     <van-goods-action-icon v-if="isFavor === 0" @click="addFavor" icon="thumb-circle-o" text="点赞" />
     <van-goods-action-icon v-else @click="delFavor" icon="thumb-circle" text="点赞" />
-    <van-goods-action-icon icon="records" text="编辑" @click="$router.push({path:'/goods-edit'})" />
+    <van-goods-action-icon icon="records" text="编辑" @click="toEdit" />
 </van-goods-action>
 
 </div>
@@ -134,7 +143,7 @@
     <van-goods-action-icon v-else @click="delCollection" icon="star" text="已收藏" color="#ff5000" />
     <van-goods-action-icon v-if="isFavor === 0" @click="addFavor" icon="thumb-circle-o" text="点赞" />
     <van-goods-action-icon v-else @click="delFavor" icon="thumb-circle" text="点赞" />
-    <van-goods-action-icon icon="records" text="编辑" @click="$router.push({path:'/goods-edit'})" />
+    <van-goods-action-icon icon="records" text="编辑" @click="toTopicEdit" />
 </van-goods-action>
      
   </div >
@@ -171,6 +180,7 @@ export default {
     }
   },
   mounted () {
+    console.log(JSON.parse(sessionStorage.getItem('goodsDetail')))
     this.getImgList()
     this.isFans()
     this.getIsUserGoods()
@@ -181,6 +191,24 @@ export default {
     this.addBrower()
   },
   methods: {
+    toEdit(){
+      let url = [];
+      url = this.gooodsImgList.map(result =>{
+        return result.url
+      })
+      this.$router.push({path:'/topicAdd',query:{goodsId:this.goodsDetail.goodsId,
+      firstSortId:this.goodsDetail.firstSort,firstSortName:this.goodsDetail.firstSortName,
+      name:this.goodsDetail.secondSortName,sortId:this.goodsDetail.secondSort,
+      title:this.goodsDetail.title,intro:this.goodsDetail.intro,url:url,price:this.goodsDetail.price,iniPrice:this.goodsDetail.iniPrice}})
+    },
+    toTopicEdit(){
+      let url;
+      url = this.gooodsImgList.map(result => {
+        return result.url
+      })
+      
+      this.$router.push({path:"/topicAdd",query:{title:this.goodsDetail.title,intro:this.goodsDetail.intro,url:url,goodsId:this.goodsDetail.goodsId}})
+    },
     toAnchor(){
       
     },
@@ -271,6 +299,12 @@ export default {
 
 
 <style lang="scss" scoped>
+.Topictitle{
+  text-align: left;
+  margin-left: 20px;
+  font-size: 26px;
+  font-weight: bold;
+}
 .ivu-anchor-link{
     margin-left: 20px;
     position: fixed;
@@ -304,9 +338,9 @@ export default {
   padding-top: 20px;
   width: 100%;
   margin-bottom: 20px;
-  .el-tree-node{
+ /deep/ .el-tree-node{
     width: 100%;
-    margin-top: 10px;
+    
     .el-tree-node__content{
       height: auto;
       width:  100%;
@@ -339,8 +373,6 @@ export default {
         width: 60%;
         // height: 500px;
         margin-left: 80px;
-        
-        margin-top: -15px;
         word-break:normal;
         white-space:pre-wrap; 
         word-wrap: break-word;
@@ -351,11 +383,7 @@ export default {
 
 }
 
-.banner{
-  display: flex;
-  position: absolute;
-  top: 15px;
-}
+
 .userInfo{
   position: relative;
   // display: flex;
@@ -365,7 +393,7 @@ export default {
   .van-button{
     float: right;
   }
-  .van-image{
+  img{
     margin-left: 10px;
     height: 50px;
     width: 50px;
@@ -389,13 +417,7 @@ export default {
     }
   }
 }
-.price{
-  display: flex;
-  h3{
-    margin-left: 10px;
-    color: red;
-  }
-}
+
 .title{
   display: flex;
   padding-left: 10px;
@@ -427,8 +449,12 @@ export default {
     }
     .addMessage{
       display: flex;
+    .el-button{
+      height: 39px;
+      margin-left: 10px;
+    }
     .getInput{
-      width: 80%;
+      width: 66%;
       margin-left: 10px;
     }
     }

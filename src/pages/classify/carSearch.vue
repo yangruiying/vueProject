@@ -16,7 +16,7 @@
 <van-card
   v-for="(item,index) in carList" :key="index"
   @click="toDetail(item.sortId,item.carIcon)"
-  :desc="item.minPrice+'-'+item.maxPrice"
+  :desc="item.minPrice == null ? '暂无报价':item.minPrice+'-'+item.maxPrice"
   :title="item.name"
   tag="在售"
   :thumb="item.carIcon"

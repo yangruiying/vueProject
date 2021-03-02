@@ -1,5 +1,10 @@
 <template>
   <div>
+    <van-nav-bar
+    
+      title="消息"
+      
+    />
   <div class="chatframe" v-for="(item,index) in chatList" :key="index" @click="getChatDetail(item)">
     <div>
     <div style="width:90px">
@@ -138,6 +143,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .chatframe{
   border-bottom-width:1px;
   border-color:rgb(12, 10, 10);

@@ -48,23 +48,7 @@
   
   <van-tab title="二手车" v-if="$route.query.toPath == null">
    
-  <div class="showGoods" >
-    <ul class="goods-list" style="background: rgb(241, 239, 235);">
-          <li v-for="(childItem, childIndex) in goodsList" :key="childIndex" @click="getGoodsDetail(childItem.goodsId)">
-              <el-card  :body-style="{ padding: '0px' }">
-                <img :src="childItem.indexPath" class="image">
-                <div style="padding: 14px;">
-                  <span>{{childItem.title}}</span>
-                  <div class="bottom clearfix">
-                    <!-- <time class="time">{{ currentDate }}</time> -->
-                    <price class="price">￥{{childItem.price}}</price>
-                    <!-- <el-button type="text" class="button">操作按钮</el-button> -->
-                  </div>
-                </div>
-              </el-card>
-          </li>
-        </ul>
-  </div>
+  <sencondCarList bannerShow="false"></sencondCarList>
   </van-tab>
 </van-tabs>
   
@@ -75,8 +59,10 @@
 
 import req from '@/api/sort.js'
 import req2 from '@/api/goods.js'
+import sencondCarList from '@/pages/goods-detail/secondCarList.vue'
 export default{
   name: 'classify',
+  components:{sencondCarList},
   data () {
     return {
       oneClassifyList: [
@@ -119,7 +105,9 @@ export default{
       )
     },
     toDetail(id,name){
-      this.$router.push({path:'classifyList',query:{id:id,name:name,toPath:this.$route.query.toPath}})
+      this.$router.push({path:'classifyList',query:{id:id,name:name,toPath:this.$route.query.toPath,goodsId:this.$route.query.goodsId,
+      title:this.$route.query.title,intro:this.$route.query.intro,url:this.$route.query.url,
+      price:this.$route.query.price,iniPrice:this.$route.query.iniPrice,goodsId:this.$route.query.goodsId}})
     },
     getFirstSort () {
       req('getFirstSort', {}).then(data => {
@@ -154,6 +142,9 @@ export default{
 
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
+/deep/ .van-tabs__line{
+  background: #1989fa;
+}
 /deep/ .van-grid-item__content{
   padding: 10px 2px;
 }

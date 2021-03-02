@@ -1,16 +1,22 @@
 <template>
-  <div style="background:white">
-      <div class="banner">
-          <div @click="$router.push({path: 'home'})"><span class="iconfont icon-fanhui"></span></div>
-          <div class="title-name">发布</div>
-          <div><el-button class="publish" @click="publish" type="primary">发布</el-button></div>
-      </div>
-    <textarea class="title" placeholder="请输入物品标题" v-model="formData.title"></textarea>
+  <div style="background:white;height:100vh">
+      <van-nav-bar
+    
+      :title="this.formData.goodsId == null ? '上架二手车' : '修改二手车'"
+      left-text="返回"
+      right-text="发布"
+      left-arrow
+      @click-left="$router.push({path:'/classify'})"
+      @click-right="publish()"
+      
+    />
+    <textarea class="title" placeholder="请输入车辆标题" v-model="formData.title"></textarea>
     <textarea class="intro" placeholder="品牌型号，新旧程度，入手渠道，转手原因" v-model="formData.intro"></textarea>
     <div class="uploadImage">
     <el-upload
       :action="this.config.uploadurl+'/imageUpload/uploadImage'"
       name="imageFile"
+      :file-list="fileList"
       list-type="picture-card"
       accept="image/*"
       :on-preview="handlePictureCardPreview"
@@ -24,18 +30,12 @@
     </el-dialog>
 
     </div>
-    <div class="sort">
-      <div>分类</div>
-      <div>
-      <el-select @change="getSecondSort"  v-model="formData.firstSort">
-        <el-option v-for="item in first" :key="item.sortId" :label="item.name" :value="item.sortId"></el-option>
-      </el-select>
-      </div>
-      <div>
-      <el-select class="secondSort" v-model="formData.secondSort">
-        <el-option v-for="item in second" :key="item.sortId" :label="item.name" :value="item.sortId"></el-option>
-      </el-select>
-      </div>
+    <div style="text-align:left" @click="toSecondCar">
+    <van-tag  round size="medium" type="primary" icon="arrow">
+      <span v-if="name!=''&&name!=null">{{firstSortName + '  '}}{{name}}</span>
+      <span v-else>请选择品牌</span>
+    </van-tag>
+    <van-icon name="arrow"  />
     </div>
     <el-form class="condition">
         <el-form-item label="价格" label-width="60px">
@@ -44,11 +44,9 @@
         <el-form-item label="入手价" label-width="60px">
         <el-input v-model="formData.iniPrice"></el-input>
         </el-form-item>
-        <el-form-item label="邮费" label-width="60px" >
-        <el-input v-model="formData.shipping"></el-input>
-        </el-form-item>
     </el-form>
     <div>{{test}}</div>
+    
   </div>
 </template>
 
@@ -65,12 +63,14 @@ export default {
       test: '',
       size: 0,
       formData: {
-        title: '',
-        intro: '',
-        price: '',
-        iniPrice: '',
+        goodsId:this.$route.query.goodsId,
+        title: this.$route.query.title,
+        intro: this.$route.query.intro,
+        url: this.$route.query.url,
+        price: this.$route.query.price,
+        iniPrice: this.$route.query.iniPrice,
         shipping: '',
-        url: [],
+        url: this.$route.query.url,
         firstSort: '',
         secondSort: '',
         userId: sessionStorage.getItem('userId'),
@@ -82,16 +82,33 @@ export default {
       second: [],
       firstSelected: {
         sortId: ''
-      }
+      },
+      sortId:this.$route.query.sortId,
+      name:this.$route.query.name,
+      firstSortId:this.$route.query.firstSortId,
+      firstSortName:this.$route.query.firstSortName,
     }
   },
   mounted () {
+    this.fileList = this.formData.url.map(result => {
+        return {url:result}
+      })
     this.getFirstSort()
   },
   methods: {
+    toSecondCar(){
+      this.$router.push({path:"/classify",query:{firstSortId:this.firstSortId,
+      firstSortName:this.firstSortName,sortId:this.sortId,name:this.name,
+      toPath:3,goodsId:this.formData.goodsId,title:this.formData.title,
+      intro:this.formData.intro,url:this.formData.url,
+      price:this.formData.price,iniPrice:this.formData.iniPrice,goodsId:this.formData.goodsId}})
+    },
     onSuccess(file, fileList){
         // alert(JSON.stringify(fileList))
         this.fileList=fileList
+        if (this.formData.url == null) {
+          this.formData.url = []
+        }
         this.formData.url.push(file.data)
         // alert(this.formData.url)
     },
@@ -238,4 +255,40 @@ export default {
     flex: 1;
   }
 }
+/deep/ .el-upload--picture-card{
+  width: 100px;
+  height: 100px;
+
+}
+  /deep/ .el-upload--picture-card i {
+    font-size: 30px;
+    color: #8c939d;
+    display: block;
+    margin-top: 35px;
+  }
+  /deep/  .el-upload-list--picture-card .el-upload-list__item{
+    width: 100px;
+    height: 100px;
+  }
+
+  .van-tag{
+    margin-left: 10px;
+    margin-top: 20px;
+    padding: 8px;
+    background: rgb(235, 235, 235);
+    color: black;
+    padding-right: 20px;
+  }
+  .van-icon{
+    right: 20px;
+    top: 3px;
+  }
+  .container {
+  position: absolute;
+  top: 0px;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+  
+  }
 </style>

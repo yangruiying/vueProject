@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import BMap from 'BMap'
+// import BMap from 'BMap'
 export default{
     data(){
         return{

@@ -1,5 +1,22 @@
 <template>
   <div>
+      <van-nav-bar
+    
+      title="详情"
+      left-text="返回"
+      left-arrow
+      @click-left="$router.go(-1)"
+      
+    />
+  <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+    <van-swipe-item v-for="(image, index) in gooodsImgList" :key="index">
+    <van-image
+      width="100%"
+      height="200px"
+      :src="image.url"
+    />
+    </van-swipe-item>
+  </van-swipe>
     <div class="userInfo">
       <img :src="goodsDetail.imagePath" @click="$router.push({path:'/home-page'})">
       <div class="userName">{{goodsDetail.userName}}</div>
@@ -10,25 +27,27 @@
       </div>
       </div>
     </div>
-    <div class="price">
-      <h3>￥{{goodsDetail.price}}</h3>
-    </div>
+
     <div class="title">
       <h2>{{goodsDetail.title}}</h2>
     </div>
     
+    <div class="price">
+      <h3>￥{{goodsDetail.price}}</h3>
+    </div>
     <div class="intro">
       <h3>{{goodsDetail.intro}}</h3>
     </div>
     
     <div class="imgList">
+      {{gooodsImgList}}
       <div v-for="(item , index) in gooodsImgList" :key="index" ><img :src="item.url"></div>
 
       <div class="leaveMessage">
           <h3 align="left">全部留言</h3>
           <div class="addMessage">
             <div class="getInput"><el-input v-model="message" placeholder="感兴趣请留言"></el-input></div>
-            <el-button @click="addLeaveMessage">提交留言</el-button>
+            <el-button @click="addLeaveMessage" type="primary">提交留言</el-button>
           </div>
 
           <div>
@@ -56,7 +75,7 @@
               
                >
                 <el-input :placeholder="'回复@'+data.userName" v-model="recoverMessage"></el-input>
-                <el-button @click="addRecover(data.lId)">提交回复</el-button>
+                <el-button @click="addRecover(data.lid)">提交回复</el-button>
              <el-button slot="reference" type="primary" class="recover" style="left: 0;">回复</el-button>
             </el-popover>
           </div>
@@ -111,7 +130,7 @@
 </div>
   <div v-else>
       <el-footer>
-        <div @click="$router.push({path:'/goods-edit'})">编辑</div>
+        <div @click="toEdit">编辑</div>
       </el-footer>
   </div>
 
@@ -157,6 +176,14 @@ export default {
     this.addBrower()
   },
   methods: {
+    toEdit(){
+      let url = [];
+      url = this.gooodsImgList.map(result =>{
+        return result.url
+      })
+      this.$router.push({path:'/publish',query:{goodsId:this.goodsDetail.goodsId,
+      title:this.goodsDetail.title,intro:this.goodsDetail.intro,url:url,price:this.goodsDetail.price,iniPrice:this.goodsDetail.iniPrice}})
+    },
     addBrower(){
       req('addBrower',{userId:this.userId,goodsId:this.goodsId})
     },
@@ -244,6 +271,13 @@ export default {
 
 
 <style lang="scss" scoped>
+//  .my-swipe .van-swipe-item {
+//     color: #fff;
+//     font-size: 20px;
+//     line-height: 150px;
+//     text-align: center;
+//     background-color: #39a9ed;
+//   }
 .test{
   width: 100%;
   text-align: right;
@@ -263,9 +297,9 @@ export default {
   padding-top: 20px;
   width: 100%;
   margin-bottom: 20px;
-  .el-tree-node{
+ /deep/ .el-tree-node{
     width: 100%;
-    margin-top: 10px;
+    
     .el-tree-node__content{
       height: auto;
       width:  100%;
@@ -298,8 +332,6 @@ export default {
         width: 60%;
         // height: 500px;
         margin-left: 80px;
-        
-        margin-top: -15px;
         word-break:normal;
         white-space:pre-wrap; 
         word-wrap: break-word;
@@ -347,6 +379,7 @@ export default {
 }
 .price{
   display: flex;
+  font-size: 20px;
   h3{
     margin-left: 10px;
     color: red;
@@ -382,6 +415,10 @@ export default {
     }
     .addMessage{
       display: flex;
+    .el-button{
+      height: 39px;
+      margin-left: 10px;
+    }
     .getInput{
       width: 80%;
       margin-left: 10px;

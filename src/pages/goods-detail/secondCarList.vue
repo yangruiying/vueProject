@@ -1,6 +1,8 @@
 <template>
-  <div class="container">
+
+  <div>
  <van-nav-bar
+  v-if="bannerShow == ''"
   title="条件选车"
   left-text="返回"
   right-text="按钮"
@@ -24,12 +26,13 @@
 
 <van-card
   v-for="(item,index) in carList" :key="index"
-  @click="toDetail(item.sortId,item.carIcon)"
+  @click="toDetail(item)"
   :desc="item.intro"
   :title="item.title"
   :price="item.price"
   tag="在售"
   :thumb="item.indexPath"
+  style="padding-bottom:60px"
 />
 <van-popup v-model="show" position="bottom" :style="{ height: '36%' }">
   <h3>自定义价格</h3>
@@ -61,7 +64,12 @@
 import req from '@/api/goods.js'
 import reqq from '@/api/sort.js'
 export default{
-  name: 'classify',
+  name: 'secondCarList',
+  props:{
+    bannerShow: {
+      type: String,
+      default: ''
+    },},
   data () {
     return {
       value1: "",
@@ -88,8 +96,8 @@ export default{
       maxPrice:0,
       carList:[],
       show: false,
-      firstShow:true,
-      secondShow:true,
+      firstShow:false,
+      secondShow:false,
       sortId:this.$route.query.sortId,
       name:this.$route.query.name,
       firstSortId:this.$route.query.firstSortId,
@@ -99,6 +107,12 @@ export default{
     }
   },
   mounted () {
+    if (this.firstSortName != "" && this.firstSortName != null){
+      this.firstShow = true
+    }
+    if (this.name != "" && this.name != null) {
+      this.secondShow = true
+    }
     this.getData(),
     this.init()
     this.getFirstSort()
@@ -138,13 +152,15 @@ export default{
       this.getData()
     },
     getData(){
-      req('getGoods',{minPrice:this.minPrice,maxPrice:this.maxPrice,firstSort:this.firstSortId,sortId:this.sortId,orderType:this.value2}).then(data =>{
+      req('getGoods',{minPrice:this.minPrice,maxPrice:this.maxPrice,firstSort:this.firstSortId,sortId:this.sortId,orderType:this.value2,type:2}).then(data =>{
             this.carList = data.data.data
             console.log(JSON.stringify(this.carList))
         })
     },
-    toDetail(sortId,carIcon){
-      this.$router.push({path:"carDetail",query:{sortId:sortId,carIcon:carIcon}})
+    toDetail(goodsDetail){
+      sessionStorage.setItem("goodsDetail",JSON.stringify(goodsDetail))
+      this.$router.push({path:"/goodsDetail"})
+      // this.$router.push({path:"/goodsDetail",query:{sortId:sortId,carIcon:carIcon}})
     },
     showPopup() {
       this.show = true;

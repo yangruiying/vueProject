@@ -1,6 +1,13 @@
 <template>
   <div id="app">
     <router-view/>
+<van-tabbar route v-show="$route.meta.footerShow">
+  <van-tabbar-item replace to="/comm-home" icon="home-o">论坛</van-tabbar-item>
+  <van-tabbar-item replace to="/classify" icon="logistics">选车</van-tabbar-item>
+  <van-tabbar-item replace to="/publish" icon="cart-o">上架</van-tabbar-item>
+  <van-tabbar-item replace to="/message" icon="chat-o">消息</van-tabbar-item>
+  <van-tabbar-item replace to="/mine" icon="user-o">我的</van-tabbar-item>
+</van-tabbar>
   </div>
 </template>
 
@@ -18,7 +25,6 @@ export default {
   text-align: center;
   /* color: #a6ff00; */
   /* color:primaryColor; */
-  margin-top: 50px;
   /* background: rgb(241, 239, 235); */
   
 }

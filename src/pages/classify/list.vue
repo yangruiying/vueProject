@@ -18,10 +18,11 @@
 </van-tabs>
 <van-card
   v-for="(item,index) in second" :key="index"
+  :class="item.status == '1' ? 'sale' : 'unsale'"
   @click="toDetail(item.sortId,item.carIcon,item.name)"
-  :desc="item.minPrice+'-'+item.maxPrice"
+  :desc="item.minPrice == null ? '暂无报价':item.minPrice+'-'+item.maxPrice"
   :title="item.name"
-  tag="在售"
+  :tag="item.status == '1' ? '在售' : '未售'"
   :thumb="item.carIcon"
 />
 
@@ -48,7 +49,7 @@ export default{
       title:this.$route.query.name,
       loadData:{
         sortId:this.$route.query.id,
-        status:"",
+        status:"1",
         carSort:""
       }
     }
@@ -64,10 +65,14 @@ export default{
         path = "secondCarList"
       }else if (this.$route.query.toPath == 2) {
         path = "topicAdd"
+      }else if(this.$route.query.toPath == 3){
+        path = "publish"
       }else{
         path = "carDetail"
       }
-      this.$router.push({path:path,query:{firstSortId:this.id,firstSortName:this.title,sortId:sortId,carIcon:carIcon,name:name,}})
+      this.$router.push({path:path,query:{firstSortId:this.id,firstSortName:this.title,sortId:sortId,carIcon:carIcon,
+      name:name,goodsId:this.$route.query.goodsId,title:this.$route.query.title,intro:this.$route.query.intro,url:this.$route.query.url,
+      price:this.$route.query.price,iniPrice:this.$route.query.iniPrice,goodsId:this.$route.query.goodsId}})
     },
     changeStatus(name,title){
       this.loadData.status = name;
@@ -111,6 +116,12 @@ export default{
 
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
+.unsale{
+  .van-tag--danger{
+    background: rgb(230, 230, 230);
+    color: black;
+  }
+}
 .van-card__desc{
   color:rgb(255, 94, 0);
   font-weight: bold;

@@ -34,7 +34,7 @@ export default new Router({
                 name: 'location'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: true
           }
         },
@@ -192,7 +192,7 @@ export default new Router({
                 toPath: '/classify'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: false
           }
         },
@@ -222,7 +222,7 @@ export default new Router({
                 toPath: '/classify'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: false
           }
         },
@@ -237,7 +237,7 @@ export default new Router({
                 toPath: '/message'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: true
           }
         },
@@ -266,7 +266,7 @@ export default new Router({
               }
             ],
             goBack: '/comm-home',
-            headerHide: false,
+            headerHide: true,
             goBackShow: true
           }
         },

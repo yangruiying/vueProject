@@ -3,9 +3,8 @@
   <van-nav-bar
   :title="name"
   left-text="返回"
-  right-text="按钮"
   left-arrow
-  @click-left="$router.push('classify')"
+  @click-left="$router.go(-1)"
   @click-right="onClickRight"
 />
 <van-image
@@ -14,10 +13,10 @@
   class="carImg"
 />
 <div>
-  <div>{{name}}</div>
-  <van-grid :column-num="2">
-  <van-grid-item icon="comment" color="#1989fa" text="论坛" @click="toTopic"/>
-  <van-grid-item icon="exchange" text="二手车价"  @click="toSecondCar"/>
+  <div class="title">{{name}}</div>
+  <van-grid :column-num="2" class="iconList">
+  <van-grid-item icon="comment" color="#1989fa" text="论坛" @click="toTopic" class="comment"/>
+  <van-grid-item icon="exchange" text="二手车价"  @click="toSecondCar" class="exchange"/>
 </van-grid>
 </div>
 <van-card
@@ -28,8 +27,8 @@
   :thumb="item.indexPath"
 >
   <template #tags>
-    <van-tag plain type="danger">标签</van-tag>
-    <van-tag plain type="danger">标签</van-tag>
+    <van-tag plain type="danger">{{firstSortName}}</van-tag>
+    <van-tag plain type="danger">{{name}}</van-tag>
   </template>
   <template #footer>
     <van-button  type="info">获取底价</van-button>
@@ -60,7 +59,7 @@ export default {
   },
   methods: {
     toSecondCar(){
-      this.$router.push({path:"/classify",query:{firstSortId:this.firstSortId,firstSortName:this.firstSortName,sortId:this.sortId,name:this.name,toPath:1}})
+      this.$router.push({path:"/secondCarList",query:{firstSortId:this.firstSortId,firstSortName:this.firstSortName,sortId:this.sortId,name:this.name,toPath:1}})
     },
     toTopic(){
       this.$router.push({path:"/topList",query:{topicTitle:this.name,sortId:this.sortId}})
@@ -79,6 +78,22 @@ export default {
 
 
 <style lang="scss" >
+
+.title{
+  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+.comment{
+  .van-grid-item__icon{
+    color: rgb(247, 19, 19);
+  }
+}
+.exchange{
+  .van-grid-item__icon{
+    color: rgb(40, 36, 235);
+  }
+}
  .container {
   position: absolute;
   top: 0;

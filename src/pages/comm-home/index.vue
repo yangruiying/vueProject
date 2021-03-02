@@ -3,6 +3,11 @@
   <!-- <div class="search">
     <el-input placeholder="请输入搜索内容"></el-input>
   </div> -->
+  
+  <van-nav-bar
+      title="论坛"
+    />
+     <van-icon name="add"  class="addIcon" @click="$router.push({path:'/topicAdd'})"/>
     <div class="topic" v-for="(item,index) in goodsList" :key="index">
       <div class="usrInfo">
         <van-image
@@ -25,6 +30,7 @@
       </div>
       <van-divider />
   </div>
+ 
 </div>
 </template>
 
@@ -119,6 +125,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
+.addIcon{
+  color: rgb(47, 0, 255);
+  font-size: 50px;
+  position: fixed;
+  bottom: 80px;
+  z-index: 999;
+  right: 20px;
+
+}
 .topicImg{
   margin: 5px;
 }

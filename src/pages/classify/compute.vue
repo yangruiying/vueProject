@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <van-nav-bar title="标题" left-text="返回" left-arrow>
+  <van-nav-bar title="标题" left-text="返回" left-arrow @click-left="$router.go(-1)">
     <template #title>
       <van-tabs v-model="active" @click = getTapShow>
         <van-tab title="全款"></van-tab>

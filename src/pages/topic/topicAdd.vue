@@ -12,10 +12,11 @@
     />
     <textarea class="title" placeholder="请输入标题" v-model="formData.title"></textarea>
     <textarea class="intro" placeholder="请输入正文" v-model="formData.intro"></textarea>
-    <div class="uploadImage">
+    <div class="uploadImage" style="padding-right:20px">
     <el-upload
       :action="this.config.uploadurl+'/imageUpload/uploadImage'"
       name="imageFile"
+      :file-list="fileList"
       list-type="picture-card"
       accept="image/*"
       :on-preview="handlePictureCardPreview"
@@ -32,7 +33,7 @@
     <div>{{test}}</div>
     <div style="text-align:left" @click="toSecondCar">
     <van-tag  round size="medium" type="primary" icon="arrow">
-      <span v-if="name!=''">{{firstSortName + '  '}}{{name}}</span>
+      <span v-if="name!=''&&name!=null">{{firstSortName + '  '}}{{name}}</span>
       <span v-else>请选择论坛</span>
     </van-tag>
     <van-icon name="arrow"  />
@@ -54,11 +55,12 @@ export default {
       test: '',
       size: 0,
       formData: {
-        title: '',
-        intro: '',
-        url: [],
-        firstSort: '',
-        secondSort: '',
+        goodsId:this.$route.query.goodsId,
+        title: this.$route.query.title,
+        intro: this.$route.query.intro,
+        url: this.$route.query.url,
+        firstSort: this.$route.query.firstSortId,
+        secondSort: this.$route.query.sortId,
         userId: sessionStorage.getItem('userId'),
         cityName:sessionStorage.getItem("city"),
         type:3
@@ -77,12 +79,19 @@ export default {
     }
   },
   mounted () {
+      this.fileList = this.formData.url.map(result => {
+        return {url:result}
+      })
+    
     this.getFirstSort()
   },
   methods: {
     onSuccess(file, fileList){
         // alert(JSON.stringify(fileList))
         this.fileList=fileList
+        if (this.formData.url == null) {
+          this.formData.url = []
+        }
         this.formData.url.push(file.data)
         // alert(this.formData.url)
     },
@@ -104,12 +113,22 @@ export default {
       this.size++
     },
     publish () {
-      req('addGoods', {...this.formData}).then(data => {
+      if (this.formData.goodsId == null) {
+        req('addGoods', {...this.formData}).then(data => {
         this.test = data.data.code
         if (data.data.code === 0) {
           this.$router.push({path: '/home'})
         }
       })
+      }else {
+        req('updateGoodsInfo', {...this.formData}).then(data => {
+        this.test = data.data.code
+        if (data.data.code === 0) {
+          this.$router.push({path: '/home'})
+        }
+      })
+      }
+      
     },
     getFirstSort () {
       reqqq('getFirstSort', {}).then(data => {
@@ -122,7 +141,7 @@ export default {
       })
     },
     toSecondCar(){
-      this.$router.push({path:"/classify",query:{firstSortId:this.firstSortId,firstSortName:this.firstSortName,sortId:this.sortId,name:this.name,toPath:2}})
+      this.$router.push({path:"/classify",query:{firstSortId:this.firstSortId,firstSortName:this.firstSortName,sortId:this.sortId,name:this.name,toPath:2,goodsId:this.formData.goodsId,title:this.formData.title,intro:this.formData.intro,url:this.formData.url}})
     },
   }
 }

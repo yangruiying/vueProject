@@ -3,6 +3,15 @@
   <!-- <div class="search">
     <el-input placeholder="请输入搜索内容"></el-input>
   </div> -->
+  <van-nav-bar
+    
+      title="论坛列表"
+      left-text="返回"
+      left-arrow
+      @click-left="$router.go(-1)"
+      @click-right="publish()"
+      
+    />
   <div class="topicTitle">{{topicTitle}}论坛</div>
     <div class="topic" v-for="(item,index) in goodsList" :key="index">
       <div class="usrInfo">
@@ -98,6 +107,7 @@ export default {
       // sessionStorage.setItem('goodsDetail', JSON.stringify(data))
       // this.$router.push({path: '/goodsDetail'})
       req('getGoodsDetail',{goodsId:goodsId}).then(data =>{
+
             sessionStorage.setItem('goodsDetail', JSON.stringify(data.data.data))
             this.$router.push({path: '/topicDetail'})
         })

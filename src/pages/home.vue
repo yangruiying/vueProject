@@ -7,6 +7,7 @@
         </el-main>
       </el-container>
       <el-header height="50px" v-show="!meta.headerHide">
+        
         <div class="user-info">
           <span class="iconfont icon-fanhui" @click="back" v-show="meta.goBackShow"></span>
           <span
@@ -64,7 +65,7 @@
 <script>
 
 import req from '@/api/chat.js'
-import BMap from 'BMap'
+// import BMap from 'BMap'
 // import BMap from 'http://api.map.baidu.com/api?v=2.0&ak=GeK4oOvKuNkv3ZHO4A8VDLpSZzzVNgiS'
 export default {
   name: 'home',
@@ -204,7 +205,9 @@ export default {
   top: 50px;
   bottom: 0;
 }
-
+/deep/ .iconfont{
+  font-size: 23px;
+}
 .el-header {
   display: flex;
   justify-content: space-between;
@@ -259,7 +262,7 @@ export default {
   padding: 0;
   display: flex;
   position: fixed;
-  height: 60px;
+  height: 56px !important; 
   justify-content: space-between;
   align-items: center;
   background: #ffffff;
@@ -275,8 +278,8 @@ export default {
     color: #333333;
 
     img {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
     }
 
     div {

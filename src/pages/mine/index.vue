@@ -133,7 +133,7 @@ export default {
   position: fixed;
   // background: blue;
   width: 100%;
-  margin-top: 130px;
+  margin-top: 160px;
   .orderCenter{
     display: flex;
     width: 90%;
