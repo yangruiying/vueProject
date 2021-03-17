@@ -69,12 +69,13 @@ export default {
         url: this.$route.query.url,
         price: this.$route.query.price,
         iniPrice: this.$route.query.iniPrice,
-        shipping: '',
+        shipping: undefined,
         url: this.$route.query.url,
         firstSort: '',
         secondSort: '',
         userId: sessionStorage.getItem('userId'),
-        cityName:sessionStorage.getItem("city")
+        cityName:sessionStorage.getItem("city"),
+        type:2
       },
       fileList: [],
       imgUrl: '',
@@ -130,6 +131,7 @@ export default {
       this.size++
     },
     publish () {
+      console.log(this.formData)
       req('addGoods', {...this.formData}).then(data => {
         this.test = data.data.code
         if (data.data.code === 0) {

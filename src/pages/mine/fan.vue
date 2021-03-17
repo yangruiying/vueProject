@@ -1,5 +1,13 @@
 <template>
   <div>
+      <van-nav-bar
+    
+      title="粉丝列表"
+      left-text="返回"
+      left-arrow
+      @click-left="$router.go(-1)"
+      
+    />
     <div v-for="(item,index) in userList" :key="index" class="list" @click="toHomePage(item.userId)">
         <img :src="item.imagePath">
         <div>{{item.userName}}</div>

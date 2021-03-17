@@ -16,6 +16,10 @@ const config = {
   addChat: {
     url: '/chat/addChat',
     method: 'post'
+  },
+  updateAddress: {
+    url: '/address/updateAddress',
+    method: 'post'
   }
 }
 

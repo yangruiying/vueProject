@@ -40,7 +40,6 @@
     </div>
     
     <div class="imgList">
-      {{gooodsImgList}}
       <div v-for="(item , index) in gooodsImgList" :key="index" ><img :src="item.url"></div>
 
       <div class="leaveMessage">

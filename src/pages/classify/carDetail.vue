@@ -31,7 +31,7 @@
     <van-tag plain type="danger">{{name}}</van-tag>
   </template>
   <template #footer>
-    <van-button  type="info">获取底价</van-button>
+    <van-button  type="info" @click="toDetail(item.goodsId)">查看详情</van-button>
     <van-button  plain icon="records"  style="float:left" class="compute" @click="toCompute(item.price)">
       计算
     </van-button>
@@ -58,6 +58,9 @@ export default {
     this.getData()
   },
   methods: {
+    toDetail(goodsId){
+      this.$router.push({path:"/modelDetail",query:{goodsId:goodsId}})
+    },
     toSecondCar(){
       this.$router.push({path:"/secondCarList",query:{firstSortId:this.firstSortId,firstSortName:this.firstSortName,sortId:this.sortId,name:this.name,toPath:1}})
     },
@@ -94,11 +97,7 @@ export default {
     color: rgb(40, 36, 235);
   }
 }
- .container {
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
+
  .carImg{
   
 }

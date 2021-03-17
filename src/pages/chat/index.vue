@@ -1,5 +1,14 @@
 <template>
   <div>
+        <van-nav-bar
+    
+      :title="formData.userName"
+      left-text="返回"
+      left-arrow
+      @click-left="$router.go(-1)"
+      @click-right="publish()"
+      
+    />
     <span class="aaa">{{chatInfo}}</span>
       <div class="banner">
         <span class="iconfont icon-fanhui" @click="back"></span>

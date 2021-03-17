@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-nav-bar
-      title="新增地址"
+      title="修改地址"
       left-text="返回"
       left-arrow
       @click-left="$router.go(-1)"
@@ -41,7 +41,7 @@
       </el-select>
       </div>
       <div class="info"><div>详细地址:&nbsp;&nbsp;</div><textarea class="intro" placeholder="如街道、小区、乡镇、村等" v-model="formData.detailAddress"></textarea></div>
-      <el-button class="submit" @click="addAddress">新增地址</el-button>
+      <el-button class="submit" @click="addAddress">修改地址</el-button>
   </div>
 </template>
 
@@ -54,6 +54,7 @@ export default {
       city: [],
       region: [],
       formData: {
+        addressId:'',
         userId: sessionStorage.getItem('userId'),
         privinceId: '',
         cityId: '',
@@ -66,6 +67,15 @@ export default {
   },
   mounted () {
     this.getPrivinceArea(0)
+    this.formData.privinceId = this.$route.query.privinceId
+    this.getCityArea(this.formData.privinceId)
+    this.formData.cityId = this.$route.query.cityId
+    this.getRegionArea(this.formData.cityId)
+    this.formData.regionId = this.$route.query.regionId
+    this.formData.detailAddress = this.$route.query.detailAddress
+    this.formData.name = this.$route.query.name
+    this.formData.phone = this.$route.query.phone
+    this.formData.addressId = this.$route.query.addressId
   },
   methods: {
     getPrivinceArea (id) {
@@ -84,7 +94,7 @@ export default {
       })
     },
     addAddress () {
-      req('addAddress', {...this.formData}).then(data => {
+      req('updateAddress', {...this.formData}).then(data => {
         this.region = data.data.data
         this.$router.push({path: '/select-address'})
       })

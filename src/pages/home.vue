@@ -21,7 +21,7 @@
       </el-header>
 
       
-      <el-footer v-show="meta.footerShow">
+      <el-footer v-show="false">
          <!-- 店长 -->
         <div @click="$router.push({path: '/comm-home'})">
           <!-- <img v-show="currentPath !== '/comm-home'" src="../assets/u1075.png" alt=""> -->
@@ -58,6 +58,13 @@
           <div :style="{color: currentPath === '/mine' ? config.pColor : '#333333'}">我的</div>
         </div>
       </el-footer>
+      <van-tabbar route v-show="$route.meta.footerShow">
+  <van-tabbar-item replace to="/comm-home" icon="home-o">论坛</van-tabbar-item>
+  <van-tabbar-item replace to="/classify" icon="logistics">选车</van-tabbar-item>
+  <van-tabbar-item replace to="/publish" icon="cart-o">上架</van-tabbar-item>
+  <van-tabbar-item replace to="/message" icon="chat-o" :badge="count == 0 ? null : count">消息</van-tabbar-item>
+  <van-tabbar-item replace to="/mine" icon="user-o">我的</van-tabbar-item>
+</van-tabbar>
     </el-container>
   </div>
 </template>
@@ -139,6 +146,7 @@ export default {
     noReadCount(){
       req('noReadCount' , {userId: this.userId}).then(data => {
         this.count = data.data.data
+        this.getGlobal.count = this.count
       })
     },  
     conectWebSocket () {
@@ -184,7 +192,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/global.scss";
 .el-badge{
-  
+  position: absolute;
 }
 .class1{
   font-size: 23px;

@@ -1,5 +1,6 @@
 <template>
   <div style="height:100vh;background:white">
+    
     <van-nav-bar
     
       title="帖子详情"
@@ -12,7 +13,7 @@
     <div class="Topictitle">
       {{goodsDetail.title}}
     </div>
-   <div class="userInfo">
+   <div class="userInfoMain" >
       <van-image
         width="3rem"
         height="3rem"
@@ -23,7 +24,7 @@
         @click="$router.push({path:'/home-page'})"
       />
       <!-- <img :src="goodsDetail.imagePath" @click="$router.push({path:'/home-page'})"> -->
-      <div style="text-align:left">
+      <div style="text-align:left;width:100%">
       <div class="userName">{{goodsDetail.userName}}
           <div class="fans">
               <div v-if="isUserGoods === 0">
@@ -51,7 +52,7 @@
           <h3 align="left">全部留言</h3>
           <div class="addMessage">
             
-            <div class="getInput" ><el-input v-model="message" placeholder="感兴趣请留言"></el-input></div>
+            <div class="getInput" id="api"><el-input v-model="message" placeholder="感兴趣请留言"></el-input></div>
             <el-button @click="addLeaveMessage" type="primary">提交留言</el-button>
            
           </div>
@@ -97,7 +98,6 @@
 
 
 
-
 <div  v-if="isUserGoods === 0">
     <!-- <el-footer>
       <div>
@@ -121,9 +121,8 @@
     </el-footer> -->
 
   <van-goods-action id="getInput">
-    <Anchor>
-        <AnchorLink href="#getInput" title="发表评论..." ref="getAnchor"/>
-  </Anchor>
+    
+    <a href="#api">感兴趣请留言...</a>
   <van-field left-icon="edit"  readonly clickable @click="toAnchor"/>
   <van-goods-action-icon v-if="isCollection === 0" @click="addCollection" icon="star-o" text="收藏"  />
     <van-goods-action-icon v-else @click="delCollection" icon="star" text="已收藏" color="#ff5000" />
@@ -135,9 +134,7 @@
 </div>
   <div v-else>
   <van-goods-action id="getInput">
-    <Anchor>
-        <AnchorLink href="#getInput" title="发表评论..." ref="getAnchor"/>
-  </Anchor>
+    <a href="#api">感兴趣请留言...</a>
   <van-field left-icon="edit"  readonly clickable @click="toAnchor"/>
   <van-goods-action-icon v-if="isCollection === 0" @click="addCollection" icon="star-o" text="收藏"  />
     <van-goods-action-icon v-else @click="delCollection" icon="star" text="已收藏" color="#ff5000" />
@@ -305,12 +302,13 @@ export default {
   font-size: 26px;
   font-weight: bold;
 }
-.ivu-anchor-link{
+a{
     margin-left: 20px;
     position: fixed;
     z-index: 999;
     bottom: 10px;
     width: 50%;
+    margin-bottom: 3px;
 }
 .van-cell {
   background: rgb(241, 241, 241);
@@ -382,7 +380,41 @@ export default {
   }
 
 }
+.userInfoMain{
+  text-align: left;
+  margin-top: 10px;
+  display: flex;
+  width: 100%;
+  height: auto;
+  margin-left: 10px;
+  .van-button{
+    float: right;
+  }
+  img{
+    margin-left: 10px;
+    height: 50px;
+    width: 50px;
+    margin-right: 10px;
+    float: left;
+  }
 
+  .fans{
+    
+    float: right;
+    margin-right: 20px;
+    margin-top: 10px;
+    .guanzhu{
+      background: red;
+      color: black;
+      width: 80px;
+    }
+    .quguan{
+      background: #c4cad1;
+      color: black;
+      width: 80px;
+    }
+  }
+}
 
 .userInfo{
   position: relative;

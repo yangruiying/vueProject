@@ -1,19 +1,24 @@
 <template>
   <div id="app">
     <router-view/>
-<van-tabbar route v-show="$route.meta.footerShow">
-  <van-tabbar-item replace to="/comm-home" icon="home-o">论坛</van-tabbar-item>
-  <van-tabbar-item replace to="/classify" icon="logistics">选车</van-tabbar-item>
-  <van-tabbar-item replace to="/publish" icon="cart-o">上架</van-tabbar-item>
-  <van-tabbar-item replace to="/message" icon="chat-o">消息</van-tabbar-item>
-  <van-tabbar-item replace to="/mine" icon="user-o">我的</van-tabbar-item>
-</van-tabbar>
+
   </div>
 </template>
 
 <script>
+
 export default {
-  name: 'App'
+  name: 'App',
+  data(){
+    return {
+      count:0
+    }
+  },
+  mounted() {
+    setTimeout(()=>{   //设置延迟执行
+    this.count = this.getGlobal.count
+},1000);
+  },
 }
 </script>
 

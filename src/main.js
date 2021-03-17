@@ -14,11 +14,13 @@ import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
+import global from '@/api/global_variable.js'
 
 Vue.use(MuseUI);
 
 Vue.use(ViewUI);
 Vue.prototype.config = config
+Vue.prototype.getGlobal = global
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(animated)

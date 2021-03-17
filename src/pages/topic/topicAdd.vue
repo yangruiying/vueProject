@@ -1,5 +1,6 @@
 <template>
   <div style="background:white;" class="container">
+    
     <van-nav-bar
     
       title="发帖"
@@ -96,9 +97,14 @@ export default {
         // alert(this.formData.url)
     },
     handleRemove(file, fileList) {
-      this.formData.url=this.formData.url.filter(item => {
-        return item != JSON.stringify(file.response.data)
+      console.log(JSON.stringify(fileList))
+      this.formData.url = []
+      fileList.forEach(item => {
+        this.formData.url.push(item.url)
       })
+      // this.formData.url=this.formData.url.filter(item => {
+      //   return item != JSON.stringify(file.response.data)
+      // })
         console.log(file, fileList);
       },
       handlePictureCardPreview(file) {

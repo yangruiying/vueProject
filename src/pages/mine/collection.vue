@@ -1,5 +1,13 @@
 <template>
   <div>
+      <van-nav-bar
+    
+      title="收藏列表"
+      left-text="返回"
+      left-arrow
+      @click-left="$router.go(-1)"
+      
+    />
     <div v-for="(item,index) in goodsList" :key="index" class="list" @click="toGoodsDetail(item.goodsId)">
         <img :src="item.indexPath">
         <div>{{item.title}}</div>

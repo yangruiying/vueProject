@@ -152,6 +152,21 @@ export default new Router({
           }
         },
         {
+          path: '/modelDetail',
+          name: 'modelDetail',
+          component: () => import('@/pages/classify/modelDetail.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '分类',
+                toPath: '/classify'
+              }
+            ],
+            headerHide: true,
+            footerShow: false
+          }
+        },
+        {
           path: '/compute',
           name: 'compute',
           component: () => import('@/pages/classify/compute.vue'),
@@ -335,7 +350,7 @@ export default new Router({
               }
             ],
             goBack: '/chat',
-            headerHide: false,
+            headerHide: true,
             goBackShow: true
           }
         },
@@ -350,7 +365,22 @@ export default new Router({
               }
             ],
             goBack: '/select-address',
-            headerHide: false,
+            headerHide: true,
+            goBackShow: true
+          }
+        },
+        {
+          path: '/edit-address',
+          name: 'edit-address',
+          component: () => import('@/pages/add-address/indexEdit.vue'),
+          meta: {
+            title: [
+              {
+                titleName: '新增地址'
+              }
+            ],
+            goBack: '/select-address',
+            headerHide: true,
             goBackShow: true
           }
         },
@@ -366,7 +396,7 @@ export default new Router({
             ],
             goBack: '/mine',
             goBackShow: true,
-            headerHide: false
+            headerHide: true
           }
         },
         {
@@ -381,7 +411,7 @@ export default new Router({
             ],
             goBack: '/mine',
             goBackShow: true,
-            headerHide: false
+            headerHide: true
           }
         },
         {
@@ -396,7 +426,7 @@ export default new Router({
             ],
             goBack: '/mine',
             goBackShow: true,
-            headerHide: false
+            headerHide: true
           }
         },
         {
@@ -470,7 +500,7 @@ export default new Router({
                 titleName: '粉丝列表'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: false,
             goBackShow: true
           }
@@ -485,7 +515,7 @@ export default new Router({
                 titleName: '关注列表'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: false,
             goBackShow: true
           }
@@ -500,7 +530,7 @@ export default new Router({
                 titleName: '收藏列表'
               }
             ],
-            headerHide: false,
+            headerHide: true,
             footerShow: false,
             goBackShow: true
           }
