@@ -72,7 +72,7 @@
 <script>
 
 import req from '@/api/chat.js'
-// import BMap from 'BMap'
+import BMap from 'BMap'
 // import BMap from 'http://api.map.baidu.com/api?v=2.0&ak=GeK4oOvKuNkv3ZHO4A8VDLpSZzzVNgiS'
 export default {
   name: 'home',

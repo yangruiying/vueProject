@@ -59,7 +59,7 @@ export default {
     },
     toSecond(){
       this.$router.push({path:"/secondCarList",query:{firstSortId:this.goodsDetail.firstSort,firstSortName:this.goodsDetail.firstSortName,
-      sortId:this.goodsDetail.secondSortId,name:this.goodsDetail.secondSortName}})
+      sortId:this.goodsDetail.secondSort,name:this.goodsDetail.secondSortName}})
     }
   }
 }

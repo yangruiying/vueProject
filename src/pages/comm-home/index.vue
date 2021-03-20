@@ -89,7 +89,7 @@ export default {
       this.$router.push({path:'/classify',query: {sortId:sortId}})
     },
     getGoods () {
-      req('getGoods', {}).then(data => {
+      req('getGoods', {type:3}).then(data => {
         this.goodsList = data.data.data
         console.log(JSON.stringify(this.goodsList))
       },
